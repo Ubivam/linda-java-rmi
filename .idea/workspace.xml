@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="4025c46a-5e90-4ad5-be1d-052a8413db0e" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CoverageViewManager">
+    <option name="myElementSize" value="241" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="1XABxI2V6hNHokXUQbyL5mMKbbD" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.General" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\joker\Documents\ETF_Projects\KDP Linda Projekat\linda-java-rmi\src\rs\ac\bg\etf\js150411d\linda\tests" />
+      <recent name="C:\Users\joker\Documents\ETF_Projects\KDP Linda Projekat\linda-java-rmi\src" />
+    </key>
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="rs.ac.bg.etf.js150411d.util" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.Integral">
+    <configuration name="ControlPanel" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="rs.ac.bg.etf.js150411d.linda.gui.ControlPanel" />
+      <module name="KDP Linda Projekat" />
+      <option name="PROGRAM_PARAMETERS" value="blasal 123" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="rs.ac.bg.etf.js150411d.linda.gui.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Integral" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="rs.ac.bg.etf.js150411d.linda.tests.Integral" />
+      <module name="KDP Linda Projekat" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="rs.ac.bg.etf.js150411d.linda.tests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="LindaServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="rs.ac.bg.etf.js150411d.linda.server.LindaServer" />
+      <module name="KDP Linda Projekat" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="rs.ac.bg.etf.js150411d.linda.server.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="rs.ac.bg.etf.js150411d.linda.Test" />
+      <module name="KDP Linda Projekat" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value=".*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="rs.ac.bg.etf.js150411d.util.Test" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.Test" />
+      <item itemvalue="Application.ControlPanel" />
+      <item itemvalue="Application.Integral" />
+      <item itemvalue="Application.LindaServer" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Integral" />
+        <item itemvalue="Application.LindaServer" />
+        <item itemvalue="Application.ControlPanel" />
+        <item itemvalue="Application.Test" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4025c46a-5e90-4ad5-be1d-052a8413db0e" name="Default Changelist" comment="" />
+      <created>1580479263640</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1580479263640</updated>
+      <workItem from="1580479267609" duration="23000" />
+      <workItem from="1580479349686" duration="1219000" />
+      <workItem from="1580483867157" duration="4314000" />
+      <workItem from="1580600014266" duration="4147000" />
+      <workItem from="1580680824919" duration="1514000" />
+      <workItem from="1580739438698" duration="27374000" />
+      <workItem from="1580859260265" duration="8054000" />
+      <workItem from="1580869364753" duration="18950000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="552" y="179" key="#Project_Structure" timestamp="1580479354877">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="552" y="179" key="#Project_Structure/0.0.1920.1040@0.0.1920.1040" timestamp="1580479354877" />
+    <state x="414" y="176" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1580855816708">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="414" y="176" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1580855816708" />
+    <state x="292" y="230" key="#com.intellij.ide.util.MemberChooser" timestamp="1580911807281">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="292" y="230" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1580911807281" />
+    <state x="689" y="305" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1580741139900">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="689" y="305" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1580741139900" />
+    <state x="740" y="276" key="FileChooserDialogImpl" timestamp="1580481395665">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="740" y="276" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1580481395665" />
+    <state width="1877" height="348" key="GridCell.Tab.0.bottom" timestamp="1580921314442">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="348" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1580921314442" />
+    <state width="1877" height="348" key="GridCell.Tab.0.center" timestamp="1580921314442">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="348" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1580921314442" />
+    <state width="1877" height="348" key="GridCell.Tab.0.left" timestamp="1580921314442">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="348" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1580921314442" />
+    <state width="1877" height="348" key="GridCell.Tab.0.right" timestamp="1580921314442">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="348" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1580921314442" />
+    <state width="1877" height="348" key="GridCell.Tab.1.bottom" timestamp="1580921314442">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="348" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1580921314442" />
+    <state width="1877" height="348" key="GridCell.Tab.1.center" timestamp="1580921314442">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="348" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1580921314442" />
+    <state width="1877" height="348" key="GridCell.Tab.1.left" timestamp="1580921314442">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="348" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1580921314442" />
+    <state width="1877" height="348" key="GridCell.Tab.1.right" timestamp="1580921314442">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="348" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1580921314442" />
+    <state x="849" y="114" key="SettingsEditor" timestamp="1580479973447">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="849" y="114" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1580479973447" />
+    <state x="565" y="403" key="com.intellij.ide.util.TipDialog" timestamp="1580869382156">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="565" y="403" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1580869382156" />
+    <state x="690" y="287" key="extract.method.dialog" timestamp="1580852881351">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="690" y="287" key="extract.method.dialog/0.0.1920.1040@0.0.1920.1040" timestamp="1580852881351" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1580863753057">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1580863753057" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/rs/ac/bg/etf/js150411d/linda/tests/Worker.java</url>
+          <line>32</line>
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/rs/ac/bg/etf/js150411d/linda/tests/Bag.java</url>
+          <line>45</line>
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/rs/ac/bg/etf/js150411d/linda/tests/Worker.java</url>
+          <line>11</line>
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/rs/ac/bg/etf/js150411d/linda/tests/Integral.java</url>
+          <line>41</line>
+          <option name="timeStamp" value="27" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/rs/ac/bg/etf/js150411d/linda/server/LindaClient.java</url>
+          <line>53</line>
+          <option name="timeStamp" value="28" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/linda_java_rmi$Integral.ic" NAME="Integral Coverage Results" MODIFIED="1580875299081" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>rs.ac.bg.etf.js150411d.linda.tests.*</FILTER>
+    </SUITE>
+  </component>
+</project>
