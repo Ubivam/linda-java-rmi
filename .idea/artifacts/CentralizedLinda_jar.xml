@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="CentralizedLinda:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/CentralizedLinda_jar</output-path>
+    <root id="archive" name="KDP Linda Projekat.jar">
+      <element id="module-output" name="KDP Linda Projekat" />
+    </root>
+  </artifact>
+</component>

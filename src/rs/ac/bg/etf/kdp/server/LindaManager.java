@@ -1,33 +1,40 @@
 package rs.ac.bg.etf.js150411d.linda.server;
 
 import rs.ac.bg.etf.js150411d.linda.Linda;
-import rs.ac.bg.etf.js150411d.linda.util.Callback;
+import rs.ac.bg.etf.js150411d.linda.gui.ControlPanel;
 import rs.ac.bg.etf.js150411d.linda.util.SynchronousCallback;
 
 import java.rmi.NotBoundException;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.rmi.server.RemoteStub;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.UUID;
 
-public class LindaClient implements Linda {
+public class LindaManager implements Linda,ClientCallbackInterface {
+
+    private static ControlPanel cp;
 
     private LindaRMI linda;
 
-    final ReentrantLock lock = new ReentrantLock(true);
     private int port;
 
     private String host;
 
-    public LindaClient(String host, int port) {
+    public LindaManager(ControlPanel cp , String host, int port) {
+        this.cp = cp;
+        new LindaManager(host,port);
+    }
+
+    public LindaManager(String host, int port) {
         this.host = host;
         this.port = port;
         try {
+            ClientCallbackInterface client = this;
+            UnicastRemoteObject.exportObject(client,0);
             Registry r = LocateRegistry.getRegistry(host, port);
             linda = (LindaRMI) r.lookup("/LindaServer");
+            linda.registerManager(client, UUID.fromString("067e6162-3b6f-4ae2-a171-2470b63dff00"));
         } catch (RemoteException | NotBoundException e) {
             e.printStackTrace();
         }
@@ -35,7 +42,6 @@ public class LindaClient implements Linda {
 
     @Override
     public void out(String[] tuple) {
-        lock.lock();
         {
             try {
                 linda.out(tuple);
@@ -43,12 +49,10 @@ public class LindaClient implements Linda {
                 e.printStackTrace();
             }
         }
-        lock.unlock();
     }
 
     @Override
     public void in(String[] tuple) {
-        lock.lock();
         {
             try {
                 var data = linda.in(tuple);
@@ -57,13 +61,11 @@ public class LindaClient implements Linda {
                 e.printStackTrace();
             }
         }
-        lock.unlock();
     }
 
     @Override
     public boolean inp(String[] tuple) {
         boolean ret = false;
-        lock.lock();
         {
             try {
                 ret = linda.inp(tuple);
@@ -72,13 +74,11 @@ public class LindaClient implements Linda {
                 e.printStackTrace();
             }
         }
-        lock.unlock();
         return ret;
     }
 
     @Override
     public void rd(String[] tuple) {
-        lock.lock();
         {
             try {
                 var data = linda.rd(tuple);
@@ -87,13 +87,11 @@ public class LindaClient implements Linda {
                 e.printStackTrace();
             }
         }
-        lock.unlock();
     }
 
     @Override
     public boolean rdp(String[] tuple) {
         boolean ret = false;
-        lock.lock();
         {
             try {
                 ret = linda.rdp(tuple);
@@ -103,13 +101,11 @@ public class LindaClient implements Linda {
                 e.printStackTrace();
             }
         }
-        lock.unlock();
         return ret;
     }
 
     @Override
     public void eval(String name, Runnable thread) {
-        // new SynchronousCallback().call(name,thread);
         try {
             linda.eval(name, thread);
         } catch (RemoteException e) {
@@ -119,7 +115,6 @@ public class LindaClient implements Linda {
 
     @Override
     public void eval(String className, Object[] construct, String methodName, Object[] arguments) {
-        // new SynchronousCallback().call(className, construct, methodName, arguments);
         try {
             linda.eval(className, construct, methodName, arguments);
         } catch (RemoteException e) {
@@ -137,5 +132,19 @@ public class LindaClient implements Linda {
 
     public LindaRMI getLinda() {
         return linda;
+    }
+
+    @Override
+    public void ping() throws RemoteException {
+
+    }
+
+    @Override
+    public void notifyChanges(String prefix) throws RemoteException {
+        if(cp != null){
+            cp.guiLog(prefix);
+        }else {
+            System.out.println(prefix);
+        }
     }
 }

@@ -2,22 +2,34 @@ package rs.ac.bg.etf.js150411d.linda.server;
 
 import rs.ac.bg.etf.js150411d.linda.Linda;
 import rs.ac.bg.etf.js150411d.linda.ToupleSpace;
+import rs.ac.bg.etf.js150411d.linda.gui.ControlPanel;
+import rs.ac.bg.etf.js150411d.linda.gui.ServerPanel;
 import rs.ac.bg.etf.js150411d.linda.sharedspace.CentralizedLinda;
 
+import javax.swing.*;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.UUID;
+
 
 public class LindaServer extends UnicastRemoteObject implements LindaRMI {
 
     private static final long serialVersionUID = 1L;
 
+    private static ServerPanel sp = null;
+
     public static int port = 4000;
 
     private Linda linda;
 
-    protected LindaServer() throws RemoteException {
+    public LindaServer(ServerPanel sp) throws RemoteException {
+        this.sp = sp;
+        new LindaServer();
+    }
+
+    public LindaServer() throws RemoteException {
         super();
         linda = new CentralizedLinda();
         ToupleSpace.setLinda(linda);
@@ -77,5 +89,28 @@ public class LindaServer extends UnicastRemoteObject implements LindaRMI {
     @Override
     public void debug(String prefix) throws RemoteException {
         ((CentralizedLinda) this.linda).debug(prefix);
+    }
+
+    @Override
+    public void registerManager(ClientCallbackInterface cbi, UUID id) throws RemoteException {
+
+        cbi.notifyChanges("Connected!");
+        log("Manager registered with id: " + id);
+    }
+
+    @Override
+    public void registerWorker(ClientCallbackInterface cbi, UUID id) throws RemoteException {
+
+        cbi.notifyChanges("Connected");
+        log("Worker registered with id: " + id);
+    }
+
+    public void log(String prefix) throws RemoteException {
+        if(sp != null) {
+            sp.guiLog(prefix);
+        }
+        else {
+            System.out.println(prefix);
+        }
     }
 }

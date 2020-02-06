@@ -11,7 +11,7 @@ public class Integral {
 			// Linda linda = (Linda) Class.forName(className).newInstance();
 			// ToupleSpace.setLinda(linda);
 
-			ToupleSpace.createLindaClient();
+			ToupleSpace.createLindaWorkstation();
 			Linda linda = ToupleSpace.getLinda();
 			int num = 10;
 			int n = 100;

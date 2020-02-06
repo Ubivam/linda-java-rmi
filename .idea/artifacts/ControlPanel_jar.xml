@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="ControlPanel:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/ControlPanel_jar</output-path>
+    <root id="archive" name="KDP Linda Projekat.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/src/Manager/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="KDP Linda Projekat" />
+    </root>
+  </artifact>
+</component>
