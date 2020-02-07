@@ -1,7 +1,9 @@
-package rs.ac.bg.etf.js150411d.linda.gui;
+package rs.ac.bg.etf.kdp.gui;
 
-import rs.ac.bg.etf.js150411d.linda.ToupleSpace;
-import rs.ac.bg.etf.js150411d.linda.server.LindaRMI;
+import rs.ac.bg.etf.kdp.ToupleSpace;
+import rs.ac.bg.etf.kdp.server.LindaManager;
+import rs.ac.bg.etf.kdp.server.LindaRMI;
+import rs.ac.bg.etf.kdp.util.Tuple;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,10 +13,11 @@ import java.rmi.RemoteException;
 
 public class ControlPanel extends JPanel {
     protected static final int WIDTH = 400;
-    protected static final int HEIGHT = 400;
+    protected static final int HEIGHT = 500;
 
     private static final String START_JOB_LABEL = "START A JOB";
     private static final String CONNECT_TO_A_SERVER = "CONNECT TO A SERVER";
+    private static final String COMMAND = "Komanda za pokretanje posla";
     private static final String PATH_TO_JOB = "Putanja do posla";
     private static final String HOST_IP = "Ip adressa servera";
     private static final String PORT = "Port servera";
@@ -22,6 +25,8 @@ public class ControlPanel extends JPanel {
 
     private JButton startJobButton;
     private JButton connectToAServer;
+    private JLabel commandLabel;
+    private JTextField commandTextField;
     private JLabel pathLabel;
     private JTextField pathTextField;
     private JLabel hostIpLabel;
@@ -42,8 +47,13 @@ public class ControlPanel extends JPanel {
         JPanel panel2 = new JPanel();
         this.add(panel1);
         this.add(panel2);
-        panel1.setLayout(new GridLayout(9, 1));
+        panel1.setLayout(new GridLayout(11, 1));
         panel2.setLayout(new BorderLayout());
+
+        commandLabel = new JLabel(COMMAND);
+
+        commandTextField = new JTextField();
+
         pathLabel = new JLabel(PATH_TO_JOB);
 
         pathTextField = new JTextField();
@@ -60,17 +70,11 @@ public class ControlPanel extends JPanel {
 
         startJobButton.addActionListener(
                 e -> {
-                    Process proc = null;
                     try {
-                        proc = Runtime.getRuntime().exec("java -jar "+ pathTextField.getText());
-                    } catch (IOException ex) {
+                        ToupleSpace.getLindaManager().executeCommand(pathTextField.getText(), commandTextField.getText());
+                    } catch (RemoteException ex) {
                         ex.printStackTrace();
                     }
-                    // Then retreive the process output
-                    InputStream in = proc.getInputStream();
-                    OutputStream out = proc.getOutputStream();
-                    InputStream err = proc.getErrorStream();
-                    System.out.println(out.toString());
                 }
         );
 
@@ -78,19 +82,25 @@ public class ControlPanel extends JPanel {
 
         connectToAServer.addActionListener(
                 e -> {
-                    guiLog("Connecting to a server...");
-                    ToupleSpace.host = hostIpTextField.getText();
-                    if(portTestField.getText() != null) {
-                        ToupleSpace.port = Integer.parseInt(portTestField.getText());
-                    }
-                    ToupleSpace.createLindaManager(this);
+                    new Thread(() -> {
+                        guiLog("Connecting to a server...");
+                        ToupleSpace.host = hostIpTextField.getText();
+                        if(portTestField.getText() != null) {
+                            ToupleSpace.port = Integer.parseInt(portTestField.getText());
+                        }
+                        ToupleSpace.createLindaManager(this);
+                    }).start();
                 }
         );
 
         consoleLabel = new JLabel(CONSOLE);
 
         console = new JTextArea();
+        JScrollPane scroll = new JScrollPane (console,
+                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
+        panel1.add(commandLabel);
+        panel1.add(commandTextField);
         panel1.add(pathLabel);
         panel1.add(pathTextField);
         panel1.add(hostIpLabel);
@@ -100,7 +110,7 @@ public class ControlPanel extends JPanel {
         panel1.add(connectToAServer);
         panel1.add(startJobButton);
         panel1.add(consoleLabel);
-        panel2.add(console);
+        panel2.add(scroll);
         appFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         appFrame.setVisible(true);
     }

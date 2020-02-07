@@ -1,7 +1,6 @@
-package rs.ac.bg.etf.js150411d.linda.tests;
+package rs.ac.bg.etf.kdp.tests;
 
-import rs.ac.bg.etf.js150411d.linda.util.SynchronousCallback;
-import rs.ac.bg.etf.js150411d.linda.util.Tuple;
+import rs.ac.bg.etf.kdp.util.Tuple;
 
 public class Test {
     public static void main(String[] args) {

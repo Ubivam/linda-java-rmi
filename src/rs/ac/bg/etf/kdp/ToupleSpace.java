@@ -1,20 +1,25 @@
-package rs.ac.bg.etf.js150411d.linda;
+package rs.ac.bg.etf.kdp;
 
-import rs.ac.bg.etf.js150411d.linda.gui.ControlPanel;
-import rs.ac.bg.etf.js150411d.linda.gui.WorkstationPanel;
-import rs.ac.bg.etf.js150411d.linda.server.LindaManager;
-import rs.ac.bg.etf.js150411d.linda.server.LindaWorkstation;
-import rs.ac.bg.etf.js150411d.linda.sharedspace.CentralizedLinda;
+import rs.ac.bg.etf.kdp.gui.ControlPanel;
+import rs.ac.bg.etf.kdp.gui.WorkstationPanel;
+import rs.ac.bg.etf.kdp.server.LindaManager;
+import rs.ac.bg.etf.kdp.server.LindaWorkstation;
 
 public class ToupleSpace {
 
     static Linda linda;
+
+    static LindaManager lindaMan;
 
     public static String host = "localhost";
 
     public static int port = 4000;
 
     public static Linda getLinda() {
+
+        if(linda == null) {
+            linda = new LindaWorkstation(host,port);
+        }
         return linda;
     }
 
@@ -27,19 +32,20 @@ public class ToupleSpace {
     }
 
     public static void createLindaWorkstation(WorkstationPanel wp) {
-        linda = new LindaWorkstation(wp,host, port);
+         linda = new LindaWorkstation(wp,host, port);
     }
 
     public static void createLindaManager() {
-        linda = new LindaManager(host, port);
+        var l = new LindaManager(host, port);
+        lindaMan = l;
+        linda = l;
     }
     public static void createLindaManager(ControlPanel cp) {
-        linda = new LindaManager(cp,host, port);
+        var l = new LindaManager(cp,host, port);
+        lindaMan = l;
+        linda = l;
     }
-
-    static {
-        //Local Linda
-        linda = new CentralizedLinda();
-        //   linda = new LocalLinda();
+    public static LindaManager getLindaManager() {
+        return lindaMan;
     }
 }

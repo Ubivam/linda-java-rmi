@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Main-Class: rs.ac.bg.etf.kdp.gui.ServerPanel
+

@@ -1,7 +1,7 @@
-package rs.ac.bg.etf.js150411d.linda.tests;
+package rs.ac.bg.etf.kdp.tests;
 
-import rs.ac.bg.etf.js150411d.linda.Linda;
-import rs.ac.bg.etf.js150411d.linda.ToupleSpace;
+import rs.ac.bg.etf.kdp.Linda;
+import rs.ac.bg.etf.kdp.ToupleSpace;
 
 public class Worker implements Runnable {
 	private static final double PRECISION = 0.000001;

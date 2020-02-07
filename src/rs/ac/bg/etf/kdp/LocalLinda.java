@@ -1,4 +1,4 @@
-package rs.ac.bg.etf.js150411d.linda;
+package rs.ac.bg.etf.kdp;
 
 import java.lang.reflect.*;
 import java.util.*;

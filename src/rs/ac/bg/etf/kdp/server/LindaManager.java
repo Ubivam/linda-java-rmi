@@ -1,8 +1,7 @@
-package rs.ac.bg.etf.js150411d.linda.server;
+package rs.ac.bg.etf.kdp.server;
 
-import rs.ac.bg.etf.js150411d.linda.Linda;
-import rs.ac.bg.etf.js150411d.linda.gui.ControlPanel;
-import rs.ac.bg.etf.js150411d.linda.util.SynchronousCallback;
+import rs.ac.bg.etf.kdp.Linda;
+import rs.ac.bg.etf.kdp.gui.ControlPanel;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -23,12 +22,18 @@ public class LindaManager implements Linda,ClientCallbackInterface {
 
     public LindaManager(ControlPanel cp , String host, int port) {
         this.cp = cp;
-        new LindaManager(host,port);
+        this.host = host;
+        this.port = port;
+        bindToServer();
     }
 
     public LindaManager(String host, int port) {
         this.host = host;
         this.port = port;
+        bindToServer();
+    }
+
+    public void bindToServer() {
         try {
             ClientCallbackInterface client = this;
             UnicastRemoteObject.exportObject(client,0);
@@ -39,7 +44,6 @@ public class LindaManager implements Linda,ClientCallbackInterface {
             e.printStackTrace();
         }
     }
-
     @Override
     public void out(String[] tuple) {
         {
@@ -146,5 +150,10 @@ public class LindaManager implements Linda,ClientCallbackInterface {
         }else {
             System.out.println(prefix);
         }
+    }
+
+    @Override
+    public void executeCommand(String pathToFile, String javaCommand) throws RemoteException {
+        linda.invokeServerCommandOnWorker(pathToFile,javaCommand);
     }
 }

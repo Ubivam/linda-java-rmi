@@ -1,21 +1,17 @@
-package rs.ac.bg.etf.js150411d.linda.gui;
+package rs.ac.bg.etf.kdp.gui;
 
-import rs.ac.bg.etf.js150411d.linda.ToupleSpace;
-import rs.ac.bg.etf.js150411d.linda.server.LindaServer;
+import rs.ac.bg.etf.kdp.server.ClientCallbackInterface;
+import rs.ac.bg.etf.kdp.server.LindaRMI;
+import rs.ac.bg.etf.kdp.server.LindaServer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.stream.Stream;
 
 
 public class ServerPanel extends JPanel {
@@ -25,6 +21,7 @@ public class ServerPanel extends JPanel {
     private static final String START_SERVER = "START A SERVER";
     private static final String CONSOLE = "Console";
 
+    private Thread t;
     private JButton startJobButton;
     private JLabel consoleLabel;
     private JTextArea console;
@@ -35,7 +32,7 @@ public class ServerPanel extends JPanel {
     private Registry r = null;
 
     public ServerPanel() {
-        appFrame = new JFrame("Control Panel");
+        appFrame = new JFrame("Server Panel");
         appFrame.add("Center", this);
         appFrame.setSize(WIDTH,HEIGHT);
 
@@ -61,8 +58,20 @@ public class ServerPanel extends JPanel {
                             LindaServer.setLog(System.out);
                             guiLog("Linda server started...");
                             serverActive = true;
+                            t = new Thread(() -> {
+                                while (true) {
+                                    try {
+                                        Thread.sleep(5000);
+                                        lindaServer.invokeServerAnswer();
+                                    } catch (InterruptedException | RemoteException exception) {
+                                        exception.printStackTrace();
+                                    }
+                                }
+                            });
+                            t.start();
                         }
                         else {
+                            t.stop();
                         //    r.unbind("/LindaServer");
                             UnicastRemoteObject.unexportObject(r,false);
                             lindaServer = null;
@@ -80,10 +89,12 @@ public class ServerPanel extends JPanel {
         consoleLabel = new JLabel(CONSOLE);
 
         console = new JTextArea();
+        JScrollPane scroll = new JScrollPane (console,
+                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
         panel1.add(startJobButton);
         panel1.add(consoleLabel);
-        panel2.add(console);
+        panel2.add(scroll);
         appFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         appFrame.setVisible(true);
     }

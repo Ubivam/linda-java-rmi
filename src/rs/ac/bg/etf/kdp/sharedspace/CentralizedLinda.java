@@ -1,10 +1,8 @@
-package rs.ac.bg.etf.js150411d.linda.sharedspace;
+package rs.ac.bg.etf.kdp.sharedspace;
 
 
-import rs.ac.bg.etf.js150411d.linda.Linda;
-import rs.ac.bg.etf.js150411d.linda.util.Callback;
-import rs.ac.bg.etf.js150411d.linda.util.SynchronousCallback;
-import rs.ac.bg.etf.js150411d.linda.util.Tuple;
+import rs.ac.bg.etf.kdp.Linda;
+import rs.ac.bg.etf.kdp.util.Tuple;
 
 import java.io.Serializable;
 import java.lang.reflect.Constructor;

@@ -1,6 +1,4 @@
-package rs.ac.bg.etf.js150411d.linda.server;
-
-import rs.ac.bg.etf.js150411d.linda.util.Tuple;
+package rs.ac.bg.etf.kdp.server;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -24,9 +22,19 @@ public interface LindaRMI extends Remote {
     public void eval(String className, Object[] construct, String methodName,
                      Object[] arguments) throws RemoteException;
 
-    public void debug (String prefix) throws RemoteException;
-
     public void registerManager(ClientCallbackInterface cbi, UUID id) throws RemoteException;
 
     public void registerWorker(ClientCallbackInterface cbi, UUID id) throws RemoteException;
+
+    public void pingAnswer(UUID id) throws RemoteException;
+
+    public void invokeServerAnswer() throws RemoteException;
+
+    public void invokeServerCommandOnWorker(String filePath,String javaCommand) throws  RemoteException;
+
+    public void returnResponseToManager(UUID id, String response) throws RemoteException;
+
+    public ClientCallbackInterface getAvailableWorkStation() throws RemoteException;
+
+    public void debug (String prefix) throws RemoteException;
 }

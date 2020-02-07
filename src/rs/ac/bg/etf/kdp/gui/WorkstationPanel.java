@@ -1,15 +1,11 @@
-package rs.ac.bg.etf.js150411d.linda.gui;
+package rs.ac.bg.etf.kdp.gui;
 
-import rs.ac.bg.etf.js150411d.linda.ToupleSpace;
-import rs.ac.bg.etf.js150411d.linda.server.LindaRMI;
-import rs.ac.bg.etf.js150411d.linda.server.LindaWorkstation;
-import rs.ac.bg.etf.js150411d.linda.util.Tuple;
+import rs.ac.bg.etf.kdp.ToupleSpace;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.rmi.RemoteException;
 
 
 public class WorkstationPanel extends JPanel {
@@ -32,7 +28,7 @@ public class WorkstationPanel extends JPanel {
     private JFrame appFrame;
 
     public WorkstationPanel() {
-        appFrame = new JFrame("Control Panel");
+        appFrame = new JFrame("Workstation Panel");
         appFrame.add("Center", this);
         appFrame.setSize(WIDTH, HEIGHT);
 
@@ -69,6 +65,8 @@ public class WorkstationPanel extends JPanel {
         consoleLabel = new JLabel(CONSOLE);
 
         console = new JTextArea();
+        JScrollPane scroll = new JScrollPane (console,
+                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
         panel1.add(hostIpLabel);
         panel1.add(hostIpTextField);
@@ -76,7 +74,7 @@ public class WorkstationPanel extends JPanel {
         panel1.add(portTestField);
         panel1.add(connectToAServer);
         panel1.add(consoleLabel);
-        panel2.add(console);
+        panel2.add(scroll);
         appFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         appFrame.setVisible(true);
     }
