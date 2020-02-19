@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>rs.ac.bg.etf.kdp.sharedspace.CentralizedLinda</OriginalElement>
+  <nodes>
+    <node x="290.0" y="82.0">rs.ac.bg.etf.kdp.util.Tuple</node>
+    <node x="583.0" y="256.25">rs.ac.bg.etf.kdp.ToupleSpace</node>
+    <node x="580.0" y="203.0">rs.ac.bg.etf.kdp.util.TupleFormatException</node>
+    <node x="0.0" y="406.0">rs.ac.bg.etf.kdp.sharedspace.CentralizedLinda</node>
+    <node x="0.0" y="791.0">rs.ac.bg.etf.kdp.util.Callback</node>
+    <node x="0.0" y="125.0">rs.ac.bg.etf.kdp.Linda</node>
+    <node x="0.0" y="919.0">rs.ac.bg.etf.kdp.util.SynchronousCallback</node>
+    <node x="347.0" y="0.0">java.io.Serializable</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="rs.ac.bg.etf.kdp.Linda" target="java.io.Serializable">
+      <point x="0.0" y="-94.0" />
+      <point x="135.0" y="57.0" />
+      <point x="373.0" y="57.0" />
+      <point x="-52.0" y="16.0" />
+    </edge>
+    <edge source="rs.ac.bg.etf.kdp.sharedspace.CentralizedLinda" target="rs.ac.bg.etf.kdp.Linda">
+      <point x="0.0" y="-170.0" />
+      <point x="0.0" y="94.0" />
+    </edge>
+    <edge source="rs.ac.bg.etf.kdp.util.TupleFormatException" target="java.io.Serializable">
+      <point x="0.0" y="-16.0" />
+      <point x="694.0" y="57.0" />
+      <point x="477.0" y="57.0" />
+      <point x="52.0" y="16.0" />
+    </edge>
+    <edge source="rs.ac.bg.etf.kdp.util.SynchronousCallback" target="rs.ac.bg.etf.kdp.util.Callback">
+      <point x="0.0" y="-60.0" />
+      <point x="0.0" y="39.0" />
+    </edge>
+    <edge source="rs.ac.bg.etf.kdp.util.Tuple" target="java.io.Serializable">
+      <point x="0.0" y="-137.0" />
+      <point x="0.0" y="16.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.8" x="265.25" y="522.75" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Methods</Category>
+    <Category>Fields</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

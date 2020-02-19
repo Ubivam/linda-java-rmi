@@ -2,6 +2,7 @@ package rs.ac.bg.etf.kdp.server;
 
 import rs.ac.bg.etf.kdp.Linda;
 import rs.ac.bg.etf.kdp.gui.ControlPanel;
+import rs.ac.bg.etf.kdp.util.SynchronousCallback;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -10,17 +11,17 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.UUID;
 
-public class LindaManager implements Linda,ClientCallbackInterface {
+public class LindaManager implements Linda, ClientCallback {
 
     private static ControlPanel cp;
 
-    private LindaRMI linda;
+    private LindaRMIServer linda;
 
     private int port;
 
     private String host;
 
-    public LindaManager(ControlPanel cp , String host, int port) {
+    public LindaManager(ControlPanel cp, String host, int port) {
         this.cp = cp;
         this.host = host;
         this.port = port;
@@ -35,15 +36,16 @@ public class LindaManager implements Linda,ClientCallbackInterface {
 
     public void bindToServer() {
         try {
-            ClientCallbackInterface client = this;
-            UnicastRemoteObject.exportObject(client,0);
+            ClientCallback client = this;
+            UnicastRemoteObject.exportObject(client, 0);
             Registry r = LocateRegistry.getRegistry(host, port);
-            linda = (LindaRMI) r.lookup("/LindaServer");
+            linda = (LindaRMIServer) r.lookup("/LindaServer");
             linda.registerManager(client, UUID.fromString("067e6162-3b6f-4ae2-a171-2470b63dff00"));
         } catch (RemoteException | NotBoundException e) {
             e.printStackTrace();
         }
     }
+
     @Override
     public void out(String[] tuple) {
         {
@@ -72,8 +74,9 @@ public class LindaManager implements Linda,ClientCallbackInterface {
         boolean ret = false;
         {
             try {
-                ret = linda.inp(tuple);
-                //   fill(tuple, remoteObj.getData());
+                var nonBlockReturn = linda.inp(tuple);
+                fill(tuple, nonBlockReturn.getTuple());
+                ret = nonBlockReturn.isPassed();
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -98,8 +101,9 @@ public class LindaManager implements Linda,ClientCallbackInterface {
         boolean ret = false;
         {
             try {
-                ret = linda.rdp(tuple);
-                //fill(tuple, ret);
+                var nonBlockReturn = linda.rdp(tuple);
+                fill(tuple, nonBlockReturn.getTuple());
+                ret = nonBlockReturn.isPassed();
                 return ret;
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -110,20 +114,12 @@ public class LindaManager implements Linda,ClientCallbackInterface {
 
     @Override
     public void eval(String name, Runnable thread) {
-        try {
-            linda.eval(name, thread);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
+        new SynchronousCallback().call(name, thread);
     }
 
     @Override
     public void eval(String className, Object[] construct, String methodName, Object[] arguments) {
-        try {
-            linda.eval(className, construct, methodName, arguments);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
+        new SynchronousCallback().call(className, construct, methodName, arguments);
     }
 
     private void fill(String a[], String b[]) {
@@ -134,7 +130,7 @@ public class LindaManager implements Linda,ClientCallbackInterface {
         }
     }
 
-    public LindaRMI getLinda() {
+    public LindaRMIServer getLinda() {
         return linda;
     }
 
@@ -145,15 +141,21 @@ public class LindaManager implements Linda,ClientCallbackInterface {
 
     @Override
     public void notifyChanges(String prefix) throws RemoteException {
-        if(cp != null){
+        if (cp != null) {
             cp.guiLog(prefix);
-        }else {
+        } else {
             System.out.println(prefix);
         }
     }
 
     @Override
-    public void executeCommand(String pathToFile, String javaCommand) throws RemoteException {
-        linda.invokeServerCommandOnWorker(pathToFile,javaCommand);
+    public void executeCommand(String className, Object[] construct, String methodName,
+                               Object[] arguments) throws RemoteException {
+        linda.invokeServerCommandOnWorker(className, construct, methodName, arguments);
+    }
+
+    @Override
+    public void callbackExecute(String className, Object[] construct, String methodName, Object[] arguments) throws RemoteException {
+        new SynchronousCallback().call(className, construct, methodName, arguments);
     }
 }

@@ -1,7 +1,5 @@
 package rs.ac.bg.etf.kdp.gui;
 
-import rs.ac.bg.etf.kdp.server.ClientCallbackInterface;
-import rs.ac.bg.etf.kdp.server.LindaRMI;
 import rs.ac.bg.etf.kdp.server.LindaServer;
 
 import javax.swing.*;
@@ -15,13 +13,14 @@ import java.rmi.server.UnicastRemoteObject;
 
 
 public class ServerPanel extends JPanel {
-    protected static final int WIDTH = 400;
-    protected static final int HEIGHT = 400;
+    protected static final int WIDTH = 700;
+    protected static final int HEIGHT = 700;
 
     private static final String START_SERVER = "START A SERVER";
     private static final String CONSOLE = "Console";
 
     private Thread t;
+    private Thread refreshThread;
     private JButton startJobButton;
     private JLabel consoleLabel;
     private JTextArea console;
@@ -69,9 +68,21 @@ public class ServerPanel extends JPanel {
                                 }
                             });
                             t.start();
+                            refreshThread = new Thread(() -> {
+                                while (true) {
+                                    try {
+                                        Thread.sleep(20);
+                                        lindaServer.serverRefresh();
+                                    } catch (InterruptedException | RemoteException exception) {
+                                        exception.printStackTrace();
+                                    }
+                                }
+                            });
+                      //      refreshThread.start();
                         }
                         else {
                             t.stop();
+                            refreshThread.stop();
                         //    r.unbind("/LindaServer");
                             UnicastRemoteObject.unexportObject(r,false);
                             lindaServer = null;

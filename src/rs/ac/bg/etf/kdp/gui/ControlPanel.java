@@ -1,9 +1,6 @@
 package rs.ac.bg.etf.kdp.gui;
 
 import rs.ac.bg.etf.kdp.ToupleSpace;
-import rs.ac.bg.etf.kdp.server.LindaManager;
-import rs.ac.bg.etf.kdp.server.LindaRMI;
-import rs.ac.bg.etf.kdp.util.Tuple;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,13 +9,13 @@ import java.rmi.RemoteException;
 
 
 public class ControlPanel extends JPanel {
-    protected static final int WIDTH = 400;
-    protected static final int HEIGHT = 500;
+    protected static final int WIDTH = 900;
+    protected static final int HEIGHT = 700;
 
     private static final String START_JOB_LABEL = "START A JOB";
     private static final String CONNECT_TO_A_SERVER = "CONNECT TO A SERVER";
-    private static final String COMMAND = "Komanda za pokretanje posla";
-    private static final String PATH_TO_JOB = "Putanja do posla";
+    private static final String ENTRY_FUNCTION = "Pocetna funkcija";
+    private static final String MAIN_CLASS_NAME = "Ime klase u kojoj je pocetna funkcija";
     private static final String HOST_IP = "Ip adressa servera";
     private static final String PORT = "Port servera";
     private static final String CONSOLE = "Console";
@@ -50,11 +47,11 @@ public class ControlPanel extends JPanel {
         panel1.setLayout(new GridLayout(11, 1));
         panel2.setLayout(new BorderLayout());
 
-        commandLabel = new JLabel(COMMAND);
+        commandLabel = new JLabel(ENTRY_FUNCTION);
 
         commandTextField = new JTextField();
 
-        pathLabel = new JLabel(PATH_TO_JOB);
+        pathLabel = new JLabel(MAIN_CLASS_NAME);
 
         pathTextField = new JTextField();
 
@@ -71,7 +68,9 @@ public class ControlPanel extends JPanel {
         startJobButton.addActionListener(
                 e -> {
                     try {
-                        ToupleSpace.getLindaManager().executeCommand(pathTextField.getText(), commandTextField.getText());
+                        Object[] c = {};
+                        Object[] m = {};
+                        ToupleSpace.getLindaManager().executeCommand(pathTextField.getText(),c, commandTextField.getText(),m);
                     } catch (RemoteException ex) {
                         ex.printStackTrace();
                     }

@@ -6,11 +6,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.rmi.RemoteException;
 
 
 public class WorkstationPanel extends JPanel {
-    protected static final int WIDTH = 400;
-    protected static final int HEIGHT = 400;
+    protected static final int WIDTH = 700;
+    protected static final int HEIGHT = 700;
 
     private static WorkstationPanel wp;
     private static final String CONNECT_TO_A_SERVER = "CONNECT TO A SERVER";
@@ -58,7 +59,11 @@ public class WorkstationPanel extends JPanel {
                     if (portTestField.getText() != null) {
                         ToupleSpace.port = Integer.parseInt(portTestField.getText());
                     }
-                    ToupleSpace.createLindaWorkstation(wp);
+                    try {
+                        ToupleSpace.createLindaWorkstation(wp);
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
+                    }
                 }
         );
 

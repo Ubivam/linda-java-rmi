@@ -1,6 +1,7 @@
 package rs.ac.bg.etf.kdp.server;
 
 import rs.ac.bg.etf.kdp.Linda;
+import rs.ac.bg.etf.kdp.beans.JobContainer;
 import rs.ac.bg.etf.kdp.beans.NonBlockReturn;
 import rs.ac.bg.etf.kdp.gui.ServerPanel;
 import rs.ac.bg.etf.kdp.sharedspace.CentralizedLinda;
@@ -15,19 +16,25 @@ import java.util.Iterator;
 import java.util.UUID;
 
 
-public class LindaServerServer extends UnicastRemoteObject implements LindaRMIServer {
+public class LindaServer extends UnicastRemoteObject implements LindaRMIServer {
 
     private static final long serialVersionUID = 1L;
 
     private static ArrayList<UUID> registeredWorkersID;
 
-    private static HashMap<UUID, ClientCallbackInterface> workersCallback;
+    private static HashMap<UUID, ClientCallback> workersCallback;
 
-    private static ArrayList<UUID> activeWorkers;
+    private static ArrayList<UUID> onlineWorkers;
+
+    private static ArrayList<UUID> freeWorkers;
+
+    private static ArrayList<JobContainer> jobQueue;
+
+    private static int pointerToWorker = 0;
 
     private static UUID registeredManagerID = UUID.fromString("067e6162-3b6f-4ae2-a171-2470b63dff00");
 
-    private static ClientCallbackInterface managerCallback;
+    private static ClientCallback managerCallback;
 
     private static ServerPanel sp = null;
 
@@ -35,23 +42,23 @@ public class LindaServerServer extends UnicastRemoteObject implements LindaRMISe
 
     private Linda linda;
 
-    public LindaServerServer(ServerPanel sp) throws RemoteException {
+    public LindaServer(ServerPanel sp) throws RemoteException {
         registeredManagerID = UUID.fromString("067e6162-3b6f-4ae2-a171-2470b63dff00");
         this.sp = sp;
         linda = new CentralizedLinda();
     }
 
-    public LindaServerServer() throws RemoteException {
+    public LindaServer() throws RemoteException {
         linda = new CentralizedLinda();
     }
 
     public static void main(String[] args) {
         try {
-            LindaServerServer lindaServer = new LindaServerServer();
+            LindaServer lindaServer = new LindaServer();
             Registry r = LocateRegistry.createRegistry(port);
             r.rebind("/LindaServer", lindaServer);
 
-            LindaServerServer.setLog(System.out);
+            LindaServer.setLog(System.out);
             System.out.println("Linda server started...");
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -89,13 +96,19 @@ public class LindaServerServer extends UnicastRemoteObject implements LindaRMISe
     }
 
     @Override
-    public void eval(String name, Runnable thread) throws RemoteException {
+    public void eval(UUID id, String name, Runnable thread) throws RemoteException {
         this.linda.eval(name, thread);
     }
 
     @Override
-    public void eval(String className, Object[] construct, String methodName, Object[] arguments) throws RemoteException {
-        workersCallback.get(activeWorkers.get(0)).executeCommand(className,construct, methodName,arguments);
+    public void eval(UUID id ,String className, Object[] construct, String methodName, Object[] arguments) throws RemoteException {
+        workersCallback.get(onlineWorkers.get(pointerToWorker)).executeCommand(className, construct, methodName, arguments);
+        pointerToWorker = (pointerToWorker + 1) % onlineWorkers.size();
+//        if(freeWorkers.size() > 0){
+//            workersCallback.get(freeWorkers.remove(0)).executeCommand(className,construct, methodName,arguments);
+//        } else {
+//            workersCallback.get(id).callbackExecute(className, construct, methodName, arguments);
+//        }
     }
 
     @Override
@@ -104,7 +117,7 @@ public class LindaServerServer extends UnicastRemoteObject implements LindaRMISe
     }
 
     @Override
-    public void registerManager(ClientCallbackInterface cbi, UUID id) throws RemoteException {
+    public void registerManager(ClientCallback cbi, UUID id) throws RemoteException {
 
         if (!registeredManagerID.equals(id)) {
             cbi.notifyChanges("Not Connected, wrong UUID");
@@ -116,16 +129,18 @@ public class LindaServerServer extends UnicastRemoteObject implements LindaRMISe
     }
 
     @Override
-    public void registerWorker(ClientCallbackInterface cbi, UUID id) throws RemoteException {
+    public void registerWorker(ClientCallback cbi, UUID id) throws RemoteException {
         if (registeredWorkersID == null) {
             registeredWorkersID = new ArrayList<>();
-            activeWorkers = new ArrayList<>();
+            onlineWorkers = new ArrayList<>();
+            freeWorkers = new ArrayList<>();
         }
         if (workersCallback == null) {
             workersCallback = new HashMap<>();
         }
         registeredWorkersID.add(id);
-        activeWorkers.add(id);
+        onlineWorkers.add(id);
+        freeWorkers.add(id);
         workersCallback.put(id, cbi);
         cbi.notifyChanges("Connected");
         log("Worker registered with id: " + id);
@@ -133,7 +148,7 @@ public class LindaServerServer extends UnicastRemoteObject implements LindaRMISe
 
     @Override
     public void pingAnswer(UUID id) throws RemoteException {
-        activeWorkers.add(id);
+        onlineWorkers.add(id);
     }
 
     @Override
@@ -143,13 +158,12 @@ public class LindaServerServer extends UnicastRemoteObject implements LindaRMISe
                 Iterator<UUID> it = registeredWorkersID.iterator();
                 while (it.hasNext()) {
                     var id = it.next();
-                    if (!activeWorkers.contains(id)) {
+                    if (!onlineWorkers.contains(id)) {
                         managerCallback.notifyChanges("Worker with ID: " + id + " stopped working");
                         registeredWorkersID.remove(id);
-
                     }
-                    activeWorkers.remove(id);
-                    ClientCallbackInterface cbi = workersCallback.get(id);
+                    onlineWorkers.remove(id);
+                    ClientCallback cbi = workersCallback.get(id);
                     cbi.ping();
                 }
             } catch (RemoteException e) {
@@ -159,21 +173,44 @@ public class LindaServerServer extends UnicastRemoteObject implements LindaRMISe
     }
 
     @Override
+    public void serverRefresh() throws RemoteException {
+        if(jobQueue != null){
+            Iterator<JobContainer> it = jobQueue.iterator();
+            while (it.hasNext()) {
+                var job = it.next();
+                if(freeWorkers.size() > 0){
+                    jobQueue.remove(job);
+                    workersCallback.get(freeWorkers.remove(0)).executeCommand(job.getClassName(),job.getConstruct()
+                            , job.getMethodName(),job.getArguments());
+                }
+            }
+        }
+    }
+
+    @Override
     public void invokeServerCommandOnWorker(String className, Object[] construct, String methodName,
                                             Object[] arguments) throws RemoteException {
-        workersCallback.get(activeWorkers.get(0)).executeCommand(className,construct, methodName,arguments);
+        if(freeWorkers.size() > 0) {
+            workersCallback.get(freeWorkers.remove(0)).executeCommand(className, construct, methodName, arguments);
+        } else {
+            if(jobQueue == null) {
+                jobQueue = new ArrayList<>();
+            }
+            jobQueue.add(new JobContainer(className,construct,methodName,arguments));
+        }
     }
 
     @Override
     public void returnResponseToManager(UUID id, String response) throws RemoteException {
         if(managerCallback != null) {
             managerCallback.notifyChanges("Worker with ID: " + id + "\nReturned result: " + response);
+            freeWorkers.add(id);
         }
     }
 
     @Override
-    public ClientCallbackInterface getAvailableWorkStation() throws RemoteException {
-        return workersCallback.get(activeWorkers.get(0));
+    public ClientCallback getAvailableWorkStation() throws RemoteException {
+        return workersCallback.get(onlineWorkers.get(0));
     }
 
     public void log(String prefix) throws RemoteException {
