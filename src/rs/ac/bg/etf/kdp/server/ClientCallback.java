@@ -9,6 +9,7 @@ public interface ClientCallbackInterface extends Remote {
 
     void notifyChanges(String prefix) throws RemoteException;
 
-    void executeCommand(String pathToFile, String javaCommand) throws RemoteException;
+    void executeCommand(String className, Object[] construct, String methodName,
+                        Object[] arguments) throws RemoteException;
 
 }
