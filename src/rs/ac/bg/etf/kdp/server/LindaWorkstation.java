@@ -57,7 +57,7 @@ public class LindaWorkstation implements LindaRMIWorkstation, ClientCallback {
     }
 
     private void createLocalServer() throws RemoteException {
-        Registry r = LocateRegistry.createRegistry(4001);
+        Registry r = LocateRegistry.createRegistry(4003);
         r.rebind("/LindaWorkstation", this);
     }
 
@@ -132,6 +132,11 @@ public class LindaWorkstation implements LindaRMIWorkstation, ClientCallback {
     @Override
     public void registerProcess(RemoteCallback cb) throws RemoteException {
         this.cb = cb;
+    }
+
+    @Override
+    public void notifyJobDone() throws RemoteException {
+        linda.notifyJobDone();
     }
 
     @Override

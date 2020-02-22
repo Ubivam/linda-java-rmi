@@ -1,7 +1,6 @@
 package rs.ac.bg.etf.kdp.server;
 
 import rs.ac.bg.etf.kdp.Linda;
-import rs.ac.bg.etf.kdp.ToupleSpace;
 import rs.ac.bg.etf.kdp.gui.WorkstationPanel;
 import rs.ac.bg.etf.kdp.util.SynchronousCallback;
 
@@ -19,7 +18,7 @@ public class LindaProcess implements Linda, RemoteCallback {
 
     public LindaProcess() {
         try {
-            Registry r = LocateRegistry.getRegistry("localhost", 4001);
+            Registry r = LocateRegistry.getRegistry("localhost", 4003);
             linda = (LindaRMIWorkstation) r.lookup("/LindaWorkstation");
             linda.registerProcess(this);
 
@@ -27,7 +26,6 @@ public class LindaProcess implements Linda, RemoteCallback {
             e.printStackTrace();
         }
     }
-
 
     @Override
     public void out(String[] tuple) {
@@ -118,5 +116,9 @@ public class LindaProcess implements Linda, RemoteCallback {
     @Override
     public void call(String name, Runnable thread) throws RemoteException {
         new SynchronousCallback().call(name, thread);
+    }
+
+    public void notiffyJobDone() throws RemoteException {
+        linda.notifyJobDone();
     }
 }

@@ -25,5 +25,8 @@ public interface LindaRMIWorkstation extends Remote {
                      Object[] arguments) throws RemoteException;
 
     public void registerProcess(RemoteCallback cb) throws RemoteException;
+
+    public void notifyJobDone() throws RemoteException;
+
     public void debug (String prefix) throws RemoteException;
 }

@@ -32,7 +32,7 @@ public interface LindaRMIServer extends Remote {
 
     public void invokeServerAnswer() throws RemoteException;
 
-    public void serverRefresh() throws RemoteException;
+    public void notifyJobDone() throws RemoteException;
 
     public void invokeServerCommandOnWorker(String className, Object[] construct, String methodName,
                                             Object[] arguments) throws  RemoteException;
@@ -40,6 +40,8 @@ public interface LindaRMIServer extends Remote {
     public void returnResponseToManager(UUID id, String response) throws RemoteException;
 
     public ClientCallback getAvailableWorkStation() throws RemoteException;
+
+    public void cancelCurrentJob(UUID id) throws RemoteException;
 
     public void debug (String prefix) throws RemoteException;
 }

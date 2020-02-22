@@ -40,7 +40,7 @@ public class LindaManager implements Linda, ClientCallback {
             UnicastRemoteObject.exportObject(client, 0);
             Registry r = LocateRegistry.getRegistry(host, port);
             linda = (LindaRMIServer) r.lookup("/LindaServer");
-            linda.registerManager(client, UUID.fromString("067e6162-3b6f-4ae2-a171-2470b63dff00"));
+            linda.registerManager(client, ControlPanel.getUUID());
         } catch (RemoteException | NotBoundException e) {
             e.printStackTrace();
         }
@@ -157,5 +157,9 @@ public class LindaManager implements Linda, ClientCallback {
     @Override
     public void callbackExecute(String className, Object[] construct, String methodName, Object[] arguments) throws RemoteException {
         new SynchronousCallback().call(className, construct, methodName, arguments);
+    }
+
+    public void cancelCurrentJob(UUID id) throws RemoteException {
+        linda.cancelCurrentJob(id);
     }
 }

@@ -4,6 +4,7 @@ import rs.ac.bg.etf.kdp.gui.ControlPanel;
 import rs.ac.bg.etf.kdp.gui.WorkstationPanel;
 import rs.ac.bg.etf.kdp.server.LindaManager;
 import rs.ac.bg.etf.kdp.server.LindaProcess;
+import rs.ac.bg.etf.kdp.server.LindaRMIWorkstation;
 import rs.ac.bg.etf.kdp.server.LindaWorkstation;
 
 import java.lang.reflect.Constructor;
@@ -57,7 +58,7 @@ public class ToupleSpace {
         return lindaMan;
     }
 
-    public static void main (String argv[]) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
+    public static void main (String argv[]) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException, RemoteException {
         String[] construct = {};
         if(argv.length > 2) {
             construct = new String[argv.length - 2];
@@ -89,5 +90,10 @@ public class ToupleSpace {
         Method method = threadClass.getMethod(methodName,
                 parameterTypes);
         method.invoke(runningThread, arguments);
+
+        if(methodName.equals("main")){
+            ((LindaProcess)getLinda()).notiffyJobDone();
+        }
+
     }
 }

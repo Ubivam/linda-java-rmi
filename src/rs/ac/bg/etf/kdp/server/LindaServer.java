@@ -26,13 +26,17 @@ public class LindaServer extends UnicastRemoteObject implements LindaRMIServer {
 
     private static ArrayList<UUID> onlineWorkers;
 
-    private static ArrayList<UUID> freeWorkers;
-
     private static ArrayList<JobContainer> jobQueue;
+
+    private static ArrayList<JobContainer> jobHistory;
+
+    private static JobContainer activeJob;
 
     private static int pointerToWorker = 0;
 
-    private static UUID registeredManagerID = UUID.fromString("067e6162-3b6f-4ae2-a171-2470b63dff00");
+    private static ArrayList<UUID> registeredManagers;
+
+    private static HashMap<UUID, ClientCallback> managersCallback;
 
     private static ClientCallback managerCallback;
 
@@ -43,13 +47,14 @@ public class LindaServer extends UnicastRemoteObject implements LindaRMIServer {
     private Linda linda;
 
     public LindaServer(ServerPanel sp) throws RemoteException {
-        registeredManagerID = UUID.fromString("067e6162-3b6f-4ae2-a171-2470b63dff00");
         this.sp = sp;
         linda = new CentralizedLinda();
+        jobHistory = new ArrayList<>();
     }
 
     public LindaServer() throws RemoteException {
         linda = new CentralizedLinda();
+        jobHistory = new ArrayList<>();
     }
 
     public static void main(String[] args) {
@@ -104,11 +109,6 @@ public class LindaServer extends UnicastRemoteObject implements LindaRMIServer {
     public void eval(UUID id ,String className, Object[] construct, String methodName, Object[] arguments) throws RemoteException {
         workersCallback.get(onlineWorkers.get(pointerToWorker)).executeCommand(className, construct, methodName, arguments);
         pointerToWorker = (pointerToWorker + 1) % onlineWorkers.size();
-//        if(freeWorkers.size() > 0){
-//            workersCallback.get(freeWorkers.remove(0)).executeCommand(className,construct, methodName,arguments);
-//        } else {
-//            workersCallback.get(id).callbackExecute(className, construct, methodName, arguments);
-//        }
     }
 
     @Override
@@ -118,14 +118,17 @@ public class LindaServer extends UnicastRemoteObject implements LindaRMIServer {
 
     @Override
     public void registerManager(ClientCallback cbi, UUID id) throws RemoteException {
-
-        if (!registeredManagerID.equals(id)) {
-            cbi.notifyChanges("Not Connected, wrong UUID");
-        } else {
+        if(registeredManagers == null) {
+            registeredManagers = new ArrayList<>();
+        }
+        if(managerCallback == null){
+            managersCallback = new HashMap<>();
+        }
+            registeredManagers.add(id);
             managerCallback = cbi;
+            managersCallback.put(id,cbi);
             cbi.notifyChanges("Connected!");
             log("Manager registered with id: " + id);
-        }
     }
 
     @Override
@@ -133,14 +136,12 @@ public class LindaServer extends UnicastRemoteObject implements LindaRMIServer {
         if (registeredWorkersID == null) {
             registeredWorkersID = new ArrayList<>();
             onlineWorkers = new ArrayList<>();
-            freeWorkers = new ArrayList<>();
         }
         if (workersCallback == null) {
             workersCallback = new HashMap<>();
         }
         registeredWorkersID.add(id);
         onlineWorkers.add(id);
-        freeWorkers.add(id);
         workersCallback.put(id, cbi);
         cbi.notifyChanges("Connected");
         log("Worker registered with id: " + id);
@@ -159,7 +160,9 @@ public class LindaServer extends UnicastRemoteObject implements LindaRMIServer {
                 while (it.hasNext()) {
                     var id = it.next();
                     if (!onlineWorkers.contains(id)) {
-                        managerCallback.notifyChanges("Worker with ID: " + id + " stopped working");
+                        if(activeJob != null) {
+                            managerCallback.notifyChanges("Worker with ID: " + id + " stopped working");
+                        }
                         registeredWorkersID.remove(id);
                     }
                     onlineWorkers.remove(id);
@@ -173,30 +176,55 @@ public class LindaServer extends UnicastRemoteObject implements LindaRMIServer {
     }
 
     @Override
-    public void serverRefresh() throws RemoteException {
-        if(jobQueue != null){
-            Iterator<JobContainer> it = jobQueue.iterator();
-            while (it.hasNext()) {
-                var job = it.next();
-                if(freeWorkers.size() > 0){
-                    jobQueue.remove(job);
-                    workersCallback.get(freeWorkers.remove(0)).executeCommand(job.getClassName(),job.getConstruct()
-                            , job.getMethodName(),job.getArguments());
+    public void notifyJobDone() throws RemoteException {
+        if (sp != null) {
+            sp.guiLog("Job Done");
+        } else {
+            System.out.println("Job Done");
+        }
+        if(jobQueue == null){
+            jobQueue = new ArrayList<>();
+        }
+        activeJob.setJobState(JobContainer.State.DONE);
+        activeJob = null;
+        if(jobQueue.size() > 0) {
+            var job = jobQueue.remove(0);
+            if(sp != null) {
+                sp.updateGraphicsToEmpty(jobQueue.size() + 1);
+                if(activeJob == null){
+                    sp.updateGraphicsToEmpty(0);
                 }
             }
+            invokeServerCommandOnWorker(job.getClassName(), job.getConstruct(),job.getMethodName(),job.getArguments());
+        }
+        if(activeJob == null){
+            sp.updateGraphicsToEmpty(0);
         }
     }
+
 
     @Override
     public void invokeServerCommandOnWorker(String className, Object[] construct, String methodName,
                                             Object[] arguments) throws RemoteException {
-        if(freeWorkers.size() > 0) {
-            workersCallback.get(freeWorkers.remove(0)).executeCommand(className, construct, methodName, arguments);
-        } else {
+        if(activeJob == null) {
+            activeJob = new JobContainer(className,construct,methodName,arguments);
+            activeJob.setJobState(JobContainer.State.RUNNING);
+            jobHistory.add(activeJob);
+            if(sp != null){
+                sp.updateGraphicsToExecuting(0);
+            }
+            workersCallback.get(onlineWorkers.get(pointerToWorker)).executeCommand(className, construct, methodName, arguments);
+            pointerToWorker = (pointerToWorker + 1) % onlineWorkers.size();
+        }else {
             if(jobQueue == null) {
                 jobQueue = new ArrayList<>();
             }
-            jobQueue.add(new JobContainer(className,construct,methodName,arguments));
+            var job = new JobContainer(className,construct,methodName,arguments);
+            jobQueue.add(job);
+            jobHistory.add(job);
+            if(sp != null){
+                sp.updateGraphicToReady(jobQueue.size());
+            }
         }
     }
 
@@ -204,13 +232,17 @@ public class LindaServer extends UnicastRemoteObject implements LindaRMIServer {
     public void returnResponseToManager(UUID id, String response) throws RemoteException {
         if(managerCallback != null) {
             managerCallback.notifyChanges("Worker with ID: " + id + "\nReturned result: " + response);
-            freeWorkers.add(id);
         }
     }
 
     @Override
     public ClientCallback getAvailableWorkStation() throws RemoteException {
         return workersCallback.get(onlineWorkers.get(0));
+    }
+
+    @Override
+    public void cancelCurrentJob(UUID id) throws RemoteException {
+
     }
 
     public void log(String prefix) throws RemoteException {
