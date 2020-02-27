@@ -4,16 +4,18 @@ import rs.ac.bg.etf.kdp.beans.NonBlockReturn;
 import rs.ac.bg.etf.kdp.gui.WorkstationPanel;
 import rs.ac.bg.etf.kdp.util.SynchronousCallback;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.lang.management.ManagementFactory;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class LindaWorkstation implements LindaRMIWorkstation, ClientCallback {
 
@@ -21,9 +23,16 @@ public class LindaWorkstation implements LindaRMIWorkstation, ClientCallback {
 
     private final UUID ID = UUID.randomUUID();
 
+    ReentrantLock lock;
+    private CopyOnWriteArrayList<Process> activeProcesses;
+
     private LindaRMIServer linda;
 
     private RemoteCallback cb;
+
+    private Registry r;
+
+    private int localPort = 4028;
 
     private int port;
 
@@ -35,6 +44,8 @@ public class LindaWorkstation implements LindaRMIWorkstation, ClientCallback {
         this.port = port;
         bindToServer();
         createLocalServer();
+        activeProcesses = new CopyOnWriteArrayList<>();
+        lock = new ReentrantLock();
     }
 
     public LindaWorkstation(String host, int port) throws RemoteException {
@@ -42,28 +53,39 @@ public class LindaWorkstation implements LindaRMIWorkstation, ClientCallback {
         this.port = port;
         bindToServer();
         createLocalServer();
+        activeProcesses = new CopyOnWriteArrayList<>();
+        lock = new ReentrantLock();
     }
 
     private void bindToServer() {
         try {
             ClientCallback client = this;
             UnicastRemoteObject.exportObject(client, 0);
-            Registry r = LocateRegistry.getRegistry(host, port);
-            linda = (LindaRMIServer) r.lookup("/LindaServer");
+            Registry reg = LocateRegistry.getRegistry(host, port);
+            linda = (LindaRMIServer) reg.lookup("/LindaServer");
             linda.registerWorker(client, ID);
         } catch (RemoteException | NotBoundException e) {
             e.printStackTrace();
         }
     }
 
+    private void rebindToServer() {
+        try{
+            Registry reg = LocateRegistry.getRegistry(host, port);
+            linda = (LindaRMIServer) reg.lookup("/LindaServer");
+        }catch (RemoteException | NotBoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void createLocalServer() throws RemoteException {
-        Registry r = LocateRegistry.createRegistry(4003);
+        r = LocateRegistry.createRegistry(localPort);
         r.rebind("/LindaWorkstation", this);
     }
 
     @Override
     public void out(String[] tuple) throws RemoteException {
-        {
+        if(linda != null) {
             try {
                 linda.out(tuple);
             } catch (RemoteException e) {
@@ -74,6 +96,7 @@ public class LindaWorkstation implements LindaRMIWorkstation, ClientCallback {
 
     @Override
     public String[] in(String[] tuple) throws RemoteException {
+        if (linda == null) return null;
         String[] ret = null;
         try {
             ret = linda.in(tuple);
@@ -86,6 +109,7 @@ public class LindaWorkstation implements LindaRMIWorkstation, ClientCallback {
 
     @Override
     public NonBlockReturn inp(String[] tuple) throws RemoteException {
+        if(linda == null) return null;
         try {
             var nonBlockReturn = linda.inp(tuple);
             return nonBlockReturn;
@@ -97,6 +121,7 @@ public class LindaWorkstation implements LindaRMIWorkstation, ClientCallback {
 
     @Override
     public String[] rd(String[] tuple) throws RemoteException {
+        if(linda == null) return null;
         String[] ret = null;
         try {
             ret = linda.rd(tuple);
@@ -110,6 +135,7 @@ public class LindaWorkstation implements LindaRMIWorkstation, ClientCallback {
 
     @Override
     public NonBlockReturn rdp(String[] tuple) throws RemoteException {
+        if(linda == null) return null;
         try {
             var nonBlockReturn = linda.rdp(tuple);
             return nonBlockReturn;
@@ -126,7 +152,9 @@ public class LindaWorkstation implements LindaRMIWorkstation, ClientCallback {
 
     @Override
     public void eval(String className, Object[] construct, String methodName, Object[] arguments) throws RemoteException {
-        linda.eval(ID,className, construct, methodName, arguments);
+        if(linda != null) {
+            linda.eval(ID, className, construct, methodName, arguments);
+        }
     }
 
     @Override
@@ -136,7 +164,69 @@ public class LindaWorkstation implements LindaRMIWorkstation, ClientCallback {
 
     @Override
     public void notifyJobDone() throws RemoteException {
-        linda.notifyJobDone();
+        if(linda!=null) {
+            linda.notifyJobDone();
+        }
+    }
+
+    @Override
+    public void downloadFile(byte[] fileData, String fileName) throws RemoteException {
+        File file = new File("C:/Users/joker/Desktop/"+fileName);
+        try {
+            OutputStream os = new FileOutputStream(file,false);
+            os.write(fileData);
+            os.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void restartWorkstation() throws RemoteException {
+        linda = null;
+        UnicastRemoteObject.unexportObject(r,false);
+        Iterator<Process> it = activeProcesses.iterator();
+        while (it.hasNext()){
+            Process proc = it.next();
+            proc.destroyForcibly();
+            activeProcesses.remove(proc);
+        }
+        StringBuilder cmd = new StringBuilder();
+        cmd.append(System.getProperty("java.home") + File.separator + "bin" + File.separator + "java ");
+        for (String jvmArg : ManagementFactory.getRuntimeMXBean().getInputArguments()) {
+            cmd.append(jvmArg + " ");
+        }
+        cmd.append("-cp ").append(ManagementFactory.getRuntimeMXBean().getClassPath()).append(" ");
+        cmd.append(WorkstationPanel.class.getName()).append(" ");
+        try {
+            Runtime.getRuntime().exec(cmd.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        new Thread( () -> {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.exit(0);
+        }).start();
+    }
+
+    @Override
+    public void removeProcesses() throws RemoteException {
+        lock.lock();
+        linda = null;
+        UnicastRemoteObject.unexportObject(r,false);
+        Iterator<Process> it = activeProcesses.iterator();
+        while (it.hasNext()){
+            Process proc = it.next();
+            proc.destroyForcibly();
+            activeProcesses.remove(proc);
+        }
+        rebindToServer();
+        createLocalServer();
+        lock.unlock();
     }
 
     @Override
@@ -188,13 +278,20 @@ public class LindaWorkstation implements LindaRMIWorkstation, ClientCallback {
             Process proc = null;
             try {
 
-                proc = Runtime.getRuntime().exec("java -cp TestLinda.jar;CentralizedLinda.jar;Linda.jar rs.ac.bg.etf.kdp.ToupleSpace "
+//                proc = Runtime.getRuntime().exec("java -cp TestLinda.jar;CentralizedLinda.jar;Linda.jar rs.ac.bg.etf.kdp.ToupleSpace "
+//                                + className + " " + methodName + "\n",
+//                        null,
+//                        new File("C:/Users/joker/Documents/ETF_Projects/KDP Linda Projekat/Test"));
+                proc = Runtime.getRuntime().exec("java -cp MainJob.jar;CentralizedLinda.jar rs.ac.bg.etf.kdp.ToupleSpace "
                                 + className + " " + methodName + "\n",
                         null,
-                        new File("C:/Users/joker/Documents/ETF_Projects/KDP Linda Projekat/Test"));
+                        new File("C:/Users/joker/Desktop"));
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
+            lock.lock();
+            activeProcesses.add(proc);
+            lock.unlock();
             // Then retreive the process output
             BufferedReader stdInput = new BufferedReader(new
                     InputStreamReader(proc.getInputStream()));
@@ -233,6 +330,9 @@ public class LindaWorkstation implements LindaRMIWorkstation, ClientCallback {
                     e.printStackTrace();
                 }
             }
+            lock.lock();
+            activeProcesses.remove(proc);
+            lock.unlock();
         });
         t.start();
     }

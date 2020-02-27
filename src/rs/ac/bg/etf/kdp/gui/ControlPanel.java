@@ -16,6 +16,7 @@ public class ControlPanel extends JPanel {
 
     private static final String START_JOB_LABEL = "START A JOB";
     private static final String CANCEL_JOB_LABEL = "CANCEL A CURRENTLY ACTIVE JOB";
+    private static final String RST_WORKSTATIONS_LABEL = "RESTART WORKSTATIONS";
     private static final String CONNECT_TO_A_SERVER = "CONNECT TO A SERVER";
     private static final String ENTRY_FUNCTION = "Pocetna funkcija";
     private static final String MAIN_CLASS_NAME = "Ime klase u kojoj je pocetna funkcija: ";
@@ -28,6 +29,7 @@ public class ControlPanel extends JPanel {
     private JButton startJobButton;
     private JButton cancelAJobButton;
     private JButton connectToAServer;
+    private JButton rsttWorkstationsButton;
     private JLabel pathJobLabel;
     private JTextField pathJobField;
     private JLabel pathLibLabel;
@@ -47,14 +49,14 @@ public class ControlPanel extends JPanel {
     public ControlPanel() {
         appFrame = new JFrame("Control Panel");
         appFrame.add("Center", this);
-        appFrame.setSize(WIDTH,HEIGHT);
+        appFrame.setSize(WIDTH, HEIGHT);
 
-        setLayout(new GridLayout(2,1));
+        setLayout(new GridLayout(2, 1));
         JPanel panel1 = new JPanel();
         JPanel panel2 = new JPanel();
         this.add(panel1);
         this.add(panel2);
-        panel1.setLayout(new GridLayout(16, 1));
+        panel1.setLayout(new GridLayout(17, 1));
         panel2.setLayout(new BorderLayout());
 
         pathJobLabel = new JLabel(PATH_TO_JAR_JOB);
@@ -88,7 +90,11 @@ public class ControlPanel extends JPanel {
                     try {
                         Object[] c = {};
                         Object[] m = {};
-                        ToupleSpace.getLindaManager().executeCommand(mainClassField.getText(),c, functionField.getText(),m);
+                        var jobFile = loadAFile(pathJobField.getText());
+                        ToupleSpace.getLindaManager().sendAFileToServer(jobFile, "MainJob.jar");
+                        var libFile = loadAFile(pathLibField.getText());
+                        ToupleSpace.getLindaManager().sendAFileToServer(libFile,"CentralizedLinda.jar");
+                        ToupleSpace.getLindaManager().executeCommand(mainClassField.getText(), c, functionField.getText(), m);
                     } catch (RemoteException ex) {
                         ex.printStackTrace();
                     }
@@ -108,6 +114,18 @@ public class ControlPanel extends JPanel {
                 }
         );
 
+        rsttWorkstationsButton = new JButton(RST_WORKSTATIONS_LABEL);
+
+        rsttWorkstationsButton.addActionListener(
+                e -> {
+                    try {
+                        ToupleSpace.getLindaManager().restartWorkstation();
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+        );
+
         connectToAServer = new JButton(CONNECT_TO_A_SERVER);
 
         connectToAServer.addActionListener(
@@ -115,12 +133,13 @@ public class ControlPanel extends JPanel {
                     new Thread(() -> {
                         guiLog("Connecting to a server...");
                         ToupleSpace.host = hostIpTextField.getText();
-                        if(portTestField.getText() != null) {
+                        if (portTestField.getText() != null) {
                             ToupleSpace.port = Integer.parseInt(portTestField.getText());
                         }
                         ToupleSpace.createLindaManager(this);
                         startJobButton.setEnabled(true);
                         cancelAJobButton.setEnabled(true);
+                        rsttWorkstationsButton.setEnabled(true);
                         connectToAServer.setEnabled(false);
                     }).start();
                 }
@@ -129,7 +148,7 @@ public class ControlPanel extends JPanel {
         consoleLabel = new JLabel(CONSOLE);
 
         console = new JTextArea();
-        JScrollPane scroll = new JScrollPane (console,
+        JScrollPane scroll = new JScrollPane(console,
                 JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
         panel1.add(pathJobLabel);
@@ -147,23 +166,28 @@ public class ControlPanel extends JPanel {
         panel1.add(connectToAServer);
         panel1.add(startJobButton);
         panel1.add(cancelAJobButton);
+        panel1.add(rsttWorkstationsButton);
         panel1.add(consoleLabel);
         panel2.add(scroll);
         startJobButton.setEnabled(false);
         cancelAJobButton.setEnabled(false);
+        rsttWorkstationsButton.setEnabled(false);
         appFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         appFrame.setVisible(true);
     }
 
-    public static void main (String args[]) {
+    public static void main(String args[]) {
         new ControlPanel();
     }
-    public void guiLog (String s) {
-        StringWriter text = new StringWriter();
-        PrintWriter out = new PrintWriter(text);
-        out.println(console.getText());
-        out.println(s);
-        console.setText(text.toString());
+
+    public void guiLog(String s) {
+        new Thread(() -> {
+            StringWriter text = new StringWriter();
+            PrintWriter out = new PrintWriter(text);
+            out.println(console.getText());
+            out.println(s);
+            console.setText(text.toString());
+        }).start();
     }
 
     public static UUID getUUID() {
@@ -185,9 +209,25 @@ public class ControlPanel extends JPanel {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        String uid = output.get(2).substring(0,36);
+        String uid = output.get(2).substring(0, 36);
         UUID id = UUID.fromString(uid);
         return id;
+    }
+
+    public static byte[] loadAFile(String fileName){
+        try {
+            File file = new File(fileName);
+            byte buffer[] = new byte[(int)file.length()];
+            BufferedInputStream input = new
+                    BufferedInputStream(new FileInputStream(fileName));
+            input.read(buffer,0,buffer.length);
+            input.close();
+            return(buffer);
+        } catch(Exception e){
+            System.out.println("FileImpl: "+e.getMessage());
+            e.printStackTrace();
+            return(null);
+        }
     }
 
 }

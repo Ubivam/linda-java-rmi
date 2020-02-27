@@ -14,4 +14,11 @@ public interface ClientCallback extends Remote {
 
     void callbackExecute(String className, Object[] construct, String methodName,
                          Object[] arguments) throws RemoteException;
+
+    void restartWorkstation() throws RemoteException;
+
+    void removeProcesses() throws RemoteException;
+
+    public void downloadFile(byte[] fileData, String fileName) throws
+            RemoteException;
 }

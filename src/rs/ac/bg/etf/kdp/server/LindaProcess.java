@@ -18,7 +18,7 @@ public class LindaProcess implements Linda, RemoteCallback {
 
     public LindaProcess() {
         try {
-            Registry r = LocateRegistry.getRegistry("localhost", 4003);
+            Registry r = LocateRegistry.getRegistry("localhost", 4028);
             linda = (LindaRMIWorkstation) r.lookup("/LindaWorkstation");
             linda.registerProcess(this);
 

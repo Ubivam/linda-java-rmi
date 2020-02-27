@@ -1,6 +1,11 @@
 package rs.ac.bg.etf.kdp.tests;
 
+import rs.ac.bg.etf.kdp.gui.WorkstationPanel;
 import rs.ac.bg.etf.kdp.util.Tuple;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.management.ManagementFactory;
 
 public class Test {
     public static void main(String[] args) {
@@ -21,6 +26,7 @@ public class Test {
         System.out.println(t2.toString());
 
         System.out.println(t3.toString());
+
     }
 
 }

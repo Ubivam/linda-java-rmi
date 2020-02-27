@@ -151,7 +151,7 @@ public class LindaManager implements Linda, ClientCallback {
     @Override
     public void executeCommand(String className, Object[] construct, String methodName,
                                Object[] arguments) throws RemoteException {
-        linda.invokeServerCommandOnWorker(className, construct, methodName, arguments);
+        linda.invokeServerCommandOnWorker(ControlPanel.getUUID(), className, construct, methodName, arguments);
     }
 
     @Override
@@ -159,6 +159,24 @@ public class LindaManager implements Linda, ClientCallback {
         new SynchronousCallback().call(className, construct, methodName, arguments);
     }
 
+    @Override
+    public void restartWorkstation() throws RemoteException {
+        linda.restartWorkstations();
+    }
+
+    @Override
+    public void removeProcesses() throws RemoteException {
+
+    }
+
+    @Override
+    public void downloadFile(byte[] fileData, String fileName) throws RemoteException {
+
+    }
+
+    public void sendAFileToServer(byte[] fileData, String fileName) throws RemoteException{
+        linda.downloadFile(fileData, fileName);
+    }
     public void cancelCurrentJob(UUID id) throws RemoteException {
         linda.cancelCurrentJob(id);
     }

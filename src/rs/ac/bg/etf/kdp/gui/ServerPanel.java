@@ -172,4 +172,14 @@ public class ServerPanel extends JPanel {
         jobsPanels.get(1).revalidate();
         jobsPanels.get(1).repaint();
     }
+    public void updateGraphicsToError(int pos) {
+        java.net.URL imgURL = getClass().getResource("/images/job3.gif");
+        ImageIcon ic = new ImageIcon(imgURL,"D");
+        JLabel lab = new JLabel(ic);
+        jobsGraphic.set(pos,lab);
+        jobsPanels.get(1).remove(0);
+        jobsPanels.get(1).add(lab,0);
+        jobsPanels.get(1).revalidate();
+        jobsPanels.get(1).repaint();
+    }
 }
