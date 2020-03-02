@@ -98,6 +98,7 @@ public class CentralizedLinda implements Linda {
                 condEntry.add(0, template);
                 condEntry.add(1, (Serializable) cond);
                 takeConditions.add(condEntry);
+                Collections.shuffle(takeConditions);
                 while (!found) {
                     try {
                         cond.await();
@@ -170,6 +171,7 @@ public class CentralizedLinda implements Linda {
                 condEntry.add(0, template);
                 condEntry.add(1, (Serializable) cond);
                 readConditions.add(condEntry);
+                Collections.shuffle(readConditions);
                 while (!found) {
                     try {
                         cond.await();

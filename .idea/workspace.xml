@@ -15,12 +15,10 @@
       <change beforePath="$PROJECT_DIR$/out/artifacts/ControlPanel_jar/ControlPanel.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/ControlPanel_jar/ControlPanel.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/Server_jar/Server.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Server_jar/Server.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/Workstation_jar/Workstation.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Workstation_jar/Workstation.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/KDP Linda Projekat/rs/ac/bg/etf/kdp/beans/JobContainer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/KDP Linda Projekat/rs/ac/bg/etf/kdp/beans/JobContainer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/KDP Linda Projekat/rs/ac/bg/etf/kdp/gui/ServerPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/KDP Linda Projekat/rs/ac/bg/etf/kdp/gui/ServerPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/KDP Linda Projekat/rs/ac/bg/etf/kdp/server/LindaServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/KDP Linda Projekat/rs/ac/bg/etf/kdp/server/LindaServer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/beans/JobContainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/beans/JobContainer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/gui/ServerPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/gui/ServerPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/gui/ControlPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/gui/ControlPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/gui/WorkstationPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/gui/WorkstationPanel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/server/LindaServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/server/LindaServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/sharedspace/CentralizedLinda.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/sharedspace/CentralizedLinda.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -209,6 +207,8 @@
       <workItem from="1582798087294" duration="6198000" />
       <workItem from="1582813950505" duration="6109000" />
       <workItem from="1583082252692" duration="2375000" />
+      <workItem from="1583147942098" duration="702000" />
+      <workItem from="1583158010631" duration="2282000" />
     </task>
     <servers />
   </component>
@@ -252,22 +252,22 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="276" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1581040320902" />
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1583106437674">
+    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1583160007163">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1583106437674" />
-    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1583106437673">
+    <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1583160007163" />
+    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1583160007163">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1583106437673" />
-    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1583106437673">
+    <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1583160007163" />
+    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1583160007163">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1583106437673" />
-    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1583106437673">
+    <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1583160007163" />
+    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1583160007163">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1583106437673" />
+    <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1583160007163" />
     <state width="1877" height="278" key="GridCell.Tab.1.bottom" timestamp="1582810969259">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -288,10 +288,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="397" y="186" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1581037914788" />
-    <state x="565" y="403" key="com.intellij.ide.util.TipDialog" timestamp="1583082253943">
+    <state x="565" y="403" key="com.intellij.ide.util.TipDialog" timestamp="1583158069743">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="565" y="403" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1583082253943" />
+    <state x="565" y="403" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1583158069743" />
     <state x="690" y="287" key="extract.method.dialog" timestamp="1580852881351">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

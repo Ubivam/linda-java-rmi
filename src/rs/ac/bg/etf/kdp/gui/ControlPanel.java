@@ -91,8 +91,16 @@ public class ControlPanel extends JPanel {
                         Object[] c = {};
                         Object[] m = {};
                         var jobFile = loadAFile(pathJobField.getText());
+                        if(jobFile == null) {
+                            guiLog("There was an error, selected file is not .jar, please try again");
+                            return;
+                        }
                         ToupleSpace.getLindaManager().sendAFileToServer(jobFile, "MainJob.jar");
                         var libFile = loadAFile(pathLibField.getText());
+                        if(libFile == null) {
+                            guiLog("There was an error, selected file is not .jar, please try again");
+                            return;
+                        }
                         ToupleSpace.getLindaManager().sendAFileToServer(libFile,"CentralizedLinda.jar");
                         ToupleSpace.getLindaManager().executeCommand(mainClassField.getText(), c, functionField.getText(), m);
                     } catch (RemoteException ex) {
@@ -216,6 +224,8 @@ public class ControlPanel extends JPanel {
 
     public static byte[] loadAFile(String fileName){
         try {
+            if(!fileName.endsWith(".jar"))
+                return null;
             File file = new File(fileName);
             byte buffer[] = new byte[(int)file.length()];
             BufferedInputStream input = new

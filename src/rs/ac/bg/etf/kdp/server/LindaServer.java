@@ -286,6 +286,11 @@ public class LindaServer extends UnicastRemoteObject implements LindaRMIServer {
 
     @Override
     public void cancelCurrentJob(UUID id) throws RemoteException {
+        if(activeJob != null){
+            if(!activeJob.getManagerId().equals(id)){
+                return;
+            }
+        }
         for (var worker : onlineWorkers) {
             workersCallback.get(worker).removeProcesses();
         }

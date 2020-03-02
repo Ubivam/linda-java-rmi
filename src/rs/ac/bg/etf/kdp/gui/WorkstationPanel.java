@@ -62,6 +62,7 @@ public class WorkstationPanel extends JPanel {
                     try {
                         ToupleSpace.createLindaWorkstation(wp);
                     } catch (RemoteException ex) {
+                        guiLog("Not connected to the server please try again");
                         ex.printStackTrace();
                     }
                 }
