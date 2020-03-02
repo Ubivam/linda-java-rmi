@@ -97,8 +97,8 @@ public class CentralizedLinda implements Linda {
                 Tuple condEntry = new Tuple();
                 condEntry.add(0, template);
                 condEntry.add(1, (Serializable) cond);
-                takeConditions.add(condEntry);
-                Collections.shuffle(takeConditions);
+                takeConditions.add(((int)Math.random()*takeConditions.size()),condEntry);
+            //    Collections.shuffle(takeConditions);
                 while (!found) {
                     try {
                         cond.await();
@@ -170,8 +170,8 @@ public class CentralizedLinda implements Linda {
                 Tuple condEntry = new Tuple();
                 condEntry.add(0, template);
                 condEntry.add(1, (Serializable) cond);
-                readConditions.add(condEntry);
-                Collections.shuffle(readConditions);
+                readConditions.add(((int)Math.random()*readConditions.size()),condEntry);
+            //    Collections.shuffle(readConditions);
                 while (!found) {
                     try {
                         cond.await();

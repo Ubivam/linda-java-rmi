@@ -11,13 +11,6 @@
   <component name="ChangeListManager">
     <list default="true" id="4025c46a-5e90-4ad5-be1d-052a8413db0e" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/CentralizedLinda_jar/CentralizedLinda.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/CentralizedLinda_jar/CentralizedLinda.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/ControlPanel_jar/ControlPanel.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/ControlPanel_jar/ControlPanel.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Server_jar/Server.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Server_jar/Server.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Workstation_jar/Workstation.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Workstation_jar/Workstation.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/gui/ControlPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/gui/ControlPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/gui/WorkstationPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/gui/WorkstationPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/server/LindaServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/server/LindaServer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/sharedspace/CentralizedLinda.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/sharedspace/CentralizedLinda.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -65,7 +58,7 @@
       <recent name="rs.ac.bg.etf.js150411d.util" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.WorkstationPanel">
+  <component name="RunManager" selected="Application.ControlPanel">
     <configuration name="ControlPanel" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="rs.ac.bg.etf.kdp.gui.ControlPanel" />
       <module name="KDP Linda Projekat" />
@@ -208,7 +201,8 @@
       <workItem from="1582813950505" duration="6109000" />
       <workItem from="1583082252692" duration="2375000" />
       <workItem from="1583147942098" duration="702000" />
-      <workItem from="1583158010631" duration="2282000" />
+      <workItem from="1583158010631" duration="2907000" />
+      <workItem from="1583185719619" duration="149000" />
     </task>
     <servers />
   </component>
@@ -252,22 +246,22 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="276" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1581040320902" />
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1583160007163">
+    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1583186072520">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1583160007163" />
-    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1583160007163">
+    <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1583186072520" />
+    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1583186072519">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1583160007163" />
-    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1583160007163">
+    <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1583186072519" />
+    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1583186072518">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1583160007163" />
-    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1583160007163">
+    <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1583186072518" />
+    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1583186072519">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1583160007163" />
+    <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1583186072519" />
     <state width="1877" height="278" key="GridCell.Tab.1.bottom" timestamp="1582810969259">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -288,10 +282,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="397" y="186" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1581037914788" />
-    <state x="565" y="403" key="com.intellij.ide.util.TipDialog" timestamp="1583158069743">
+    <state x="565" y="403" key="com.intellij.ide.util.TipDialog" timestamp="1583185729559">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="565" y="403" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1583158069743" />
+    <state x="565" y="403" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1583185729559" />
     <state x="690" y="287" key="extract.method.dialog" timestamp="1580852881351">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
