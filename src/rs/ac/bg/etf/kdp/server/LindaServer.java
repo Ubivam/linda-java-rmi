@@ -24,9 +24,9 @@ public class LindaServer extends UnicastRemoteObject implements LindaRMIServer {
 
     private static CopyOnWriteArrayList<UUID> onlineWorkers;
 
-    private static ArrayList<JobContainer> jobQueue;
+    private static CopyOnWriteArrayList<JobContainer> jobQueue;
 
-    private static ArrayList<JobContainer> jobHistory;
+    private static CopyOnWriteArrayList<JobContainer> jobHistory;
 
     private static JobContainer activeJob;
 
@@ -34,15 +34,14 @@ public class LindaServer extends UnicastRemoteObject implements LindaRMIServer {
 
     private static ArrayList<UUID> registeredManagers;
 
-    private static HashMap<UUID, ClientCallback> managersCallback;
+    private static Hashtable<UUID, ClientCallback> managersCallback;
+
+    private static Hashtable<UUID, StringBuilder> offlineManagersOutput;
 
     private static ClientCallback managerCallback;
 
-    private static byte [] downloadedJob;
-    private static byte [] downLoadedLib;
-
-    private static byte [] uploadJob;
-    private static byte [] uploadLib;
+    private static byte[] downloadedJob;
+    private static byte[] downLoadedLib;
 
     private static boolean notifyInvoke = false;
 
@@ -57,12 +56,12 @@ public class LindaServer extends UnicastRemoteObject implements LindaRMIServer {
     public LindaServer(ServerPanel sp) throws RemoteException {
         this.sp = sp;
         linda = new CentralizedLinda();
-        jobHistory = new ArrayList<>();
+        jobHistory = new CopyOnWriteArrayList<>();
     }
 
     public LindaServer() throws RemoteException {
         linda = new CentralizedLinda();
-        jobHistory = new ArrayList<>();
+        jobHistory = new CopyOnWriteArrayList<>();
     }
 
     public static void main(String[] args) {
@@ -105,7 +104,7 @@ public class LindaServer extends UnicastRemoteObject implements LindaRMIServer {
     @Override
     public NonBlockReturn rdp(String[] tuple) throws RemoteException {
         var passed = this.linda.rdp(tuple);
-        return new NonBlockReturn(passed,tuple);
+        return new NonBlockReturn(passed, tuple);
     }
 
     @Override
@@ -114,13 +113,12 @@ public class LindaServer extends UnicastRemoteObject implements LindaRMIServer {
     }
 
     @Override
-    public void eval(UUID id ,String className, Object[] construct, String methodName, Object[] arguments) throws RemoteException {
+    public void eval(UUID id, String className, Object[] construct, String methodName, Object[] arguments) throws RemoteException {
         try {
             workersCallback.get(onlineWorkers.get(pointerToWorker)).executeCommand(className, construct, methodName, arguments);
             pointerToWorker = (pointerToWorker + 1) % onlineWorkers.size();
-        }
-        catch (RemoteException e){
-            workersCallback.get(id).executeCommand(className,construct,methodName,arguments);
+        } catch (RemoteException e) {
+            workersCallback.get(id).executeCommand(className, construct, methodName, arguments);
             pointerToWorker = (pointerToWorker + 1) % onlineWorkers.size();
         }
     }
@@ -132,17 +130,30 @@ public class LindaServer extends UnicastRemoteObject implements LindaRMIServer {
 
     @Override
     public void registerManager(ClientCallback cbi, UUID id) throws RemoteException {
-        if(registeredManagers == null) {
+        if (registeredManagers == null) {
             registeredManagers = new ArrayList<>();
         }
-        if(managerCallback == null){
-            managersCallback = new HashMap<>();
+        if (managerCallback == null) {
+            managersCallback = new Hashtable<>();
         }
+        if (offlineManagersOutput == null) {
+            offlineManagersOutput = new Hashtable<>();
+        }
+        cbi.notifyChanges("Connected!");
+        if (registeredManagers.contains(id)) {
+            cbi.notifyChanges("Results while you were offline: \n" );
+            if (offlineManagersOutput.get(id) != null) {
+                managersCallback.remove(id);
+                managersCallback.put(id,cbi);
+                cbi.notifyChanges(offlineManagersOutput.get(id).toString());
+            }
+        }else {
             registeredManagers.add(id);
             managerCallback = cbi;
-            managersCallback.put(id,cbi);
-            cbi.notifyChanges("Connected!");
-            log("Manager registered with id: " + id);
+            managersCallback.put(id, cbi);
+            offlineManagersOutput.put(id, new StringBuilder());
+        }
+        log("Manager registered with id: " + id);
     }
 
     @Override
@@ -174,8 +185,8 @@ public class LindaServer extends UnicastRemoteObject implements LindaRMIServer {
                 while (it.hasNext()) {
                     var id = it.next();
                     if (!onlineWorkers.contains(id)) {
-                        if(activeJob != null) {
-                            if(sp != null){
+                        if (activeJob != null) {
+                            if (sp != null) {
                                 sp.updateGraphicsToError(0);
                             }
                             managerCallback.notifyChanges("Worker with ID: " + id + " stopped working");
@@ -199,26 +210,27 @@ public class LindaServer extends UnicastRemoteObject implements LindaRMIServer {
         } else {
             System.out.println("Job Done");
         }
-        if(jobQueue == null){
-            jobQueue = new ArrayList<>();
+        if (jobQueue == null) {
+            jobQueue = new CopyOnWriteArrayList<>();
         }
         activeJob.setJobState(JobContainer.State.DONE);
         activeJob.setEndTime(new Date(System.currentTimeMillis()));
+        jobHistory.add(activeJob);
         activeJob = null;
-        if(jobQueue.size() > 0) {
+        if (jobQueue.size() > 0) {
             var job = jobQueue.remove(0);
-            if(sp != null) {
+            if (sp != null) {
                 sp.updateGraphicsToEmpty(jobQueue.size() + 1);
-                if(activeJob == null){
+                if (activeJob == null) {
                     sp.updateGraphicsToEmpty(0);
                 }
             }
             notifyInvoke = true;
             scatterFile(job.getJobJar(), "MainJob.jar");
             scatterFile(job.getLibJar(), "CentralizedLinda.jar");
-            invokeServerCommandOnWorker(job.getManagerId(), job.getClassName(), job.getConstruct(),job.getMethodName(),job.getArguments());
+            invokeServerCommandOnWorker(job.getManagerId(), job.getClassName(), job.getConstruct(), job.getMethodName(), job.getArguments());
         }
-        if(activeJob == null){
+        if (activeJob == null) {
             sp.updateGraphicsToEmpty(0);
         }
     }
@@ -227,14 +239,13 @@ public class LindaServer extends UnicastRemoteObject implements LindaRMIServer {
     @Override
     public void invokeServerCommandOnWorker(UUID managerId, String className, Object[] construct, String methodName,
                                             Object[] arguments) throws RemoteException {
-        if(activeJob == null) {
-            activeJob = new JobContainer(managerId, className,construct,methodName,arguments,downloadedJob,downLoadedLib);
+        if (activeJob == null) {
+            activeJob = new JobContainer(managerId, className, construct, methodName, arguments, downloadedJob, downLoadedLib);
             activeJob.setJobState(JobContainer.State.RUNNING);
-            jobHistory.add(activeJob);
-            if(sp != null){
+            if (sp != null) {
                 sp.updateGraphicsToExecuting(0);
             }
-            if(!notifyInvoke) {
+            if (!notifyInvoke) {
                 scatterFile(downloadedJob, "MainJob.jar");
                 scatterFile(downLoadedLib, "CentralizedLinda.jar");
             }
@@ -247,14 +258,13 @@ public class LindaServer extends UnicastRemoteObject implements LindaRMIServer {
                 pointerToWorker = (pointerToWorker + 1) % onlineWorkers.size();
                 workersCallback.get(onlineWorkers.get(pointerToWorker)).executeCommand(className, construct, methodName, arguments);
             }
-        }else {
-            if(jobQueue == null) {
-                jobQueue = new ArrayList<>();
+        } else {
+            if (jobQueue == null) {
+                jobQueue = new CopyOnWriteArrayList<>();
             }
-            var job = new JobContainer(managerId, className,construct,methodName,arguments,downloadedJob,downLoadedLib);
+            var job = new JobContainer(managerId, className, construct, methodName, arguments, downloadedJob, downLoadedLib);
             jobQueue.add(job);
-            jobHistory.add(job);
-            if(sp != null){
+            if (sp != null) {
                 sp.updateGraphicToReady(jobQueue.size());
             }
         }
@@ -262,11 +272,11 @@ public class LindaServer extends UnicastRemoteObject implements LindaRMIServer {
 
     @Override
     public void returnResponseToManager(UUID id, String response) throws RemoteException {
-            try {
-                managersCallback.get(currentJobOwner).notifyChanges("Worker with ID: " + id + "\nReturned result: " + response);
-            }catch (RemoteException e) {
-                e.printStackTrace();
-            }
+        try {
+            managersCallback.get(currentJobOwner).notifyChanges("Worker with ID: " + id + "\nReturned result: " + response);
+        } catch (RemoteException e) {
+            offlineManagersOutput.get(currentJobOwner).append("Worker with ID: " + id + "\nReturned result: " + response + "\n");
+        }
     }
 
     @Override
@@ -276,7 +286,7 @@ public class LindaServer extends UnicastRemoteObject implements LindaRMIServer {
 
     @Override
     public void cancelCurrentJob(UUID id) throws RemoteException {
-        for (var worker : onlineWorkers){
+        for (var worker : onlineWorkers) {
             workersCallback.get(worker).removeProcesses();
         }
         linda = new CentralizedLinda();
@@ -285,47 +295,47 @@ public class LindaServer extends UnicastRemoteObject implements LindaRMIServer {
         } else {
             System.out.println("Job Failed");
         }
-        if(jobQueue == null){
-            jobQueue = new ArrayList<>();
+        if (jobQueue == null) {
+            jobQueue = new CopyOnWriteArrayList<>();
         }
-        if(activeJob != null) {
+        if (activeJob != null) {
             activeJob.setJobState(JobContainer.State.ABORTED);
         }
         activeJob = null;
-        if(jobQueue.size() > 0) {
+        if (jobQueue.size() > 0) {
             var job = jobQueue.remove(0);
-            if(sp != null) {
+            if (sp != null) {
                 sp.updateGraphicsToEmpty(jobQueue.size() + 1);
-                if(activeJob == null){
+                if (activeJob == null) {
                     sp.updateGraphicsToEmpty(0);
                 }
             }
         }
-        if(activeJob == null){
+        if (activeJob == null) {
             sp.updateGraphicsToEmpty(0);
         }
     }
 
     @Override
     public void restartWorkstations() throws RemoteException {
-        for (var worker : onlineWorkers){
+        for (var worker : onlineWorkers) {
             workersCallback.get(worker).restartWorkstation();
         }
     }
 
     @Override
     public void downloadFile(byte[] fileData, String fileName) throws RemoteException {
-        if(fileName.equals("CentralizedLinda.jar")){
+        if (fileName.equals("CentralizedLinda.jar")) {
             downLoadedLib = fileData;
         }
-        if(fileName.equals("MainJob.jar")){
+        if (fileName.equals("MainJob.jar")) {
             downloadedJob = fileData;
         }
     }
 
     public void scatterFile(byte[] fileData, String fileName) throws RemoteException {
-        for (var worker : onlineWorkers){
-            workersCallback.get(worker).downloadFile(fileData,fileName);
+        for (var worker : onlineWorkers) {
+            workersCallback.get(worker).downloadFile(fileData, fileName);
         }
     }
 
@@ -334,6 +344,18 @@ public class LindaServer extends UnicastRemoteObject implements LindaRMIServer {
             sp.guiLog(prefix);
         } else {
             System.out.println(prefix);
+        }
+    }
+
+    public void logHistory() throws RemoteException {
+        if(activeJob != null) {
+            sp.guiLog(activeJob.toString());
+        }
+        for (var job: jobQueue){
+            sp.guiLog(job.toString());
+        }
+        for (var job: jobHistory) {
+            sp.guiLog(job.toString());
         }
     }
 }

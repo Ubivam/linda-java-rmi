@@ -15,24 +15,12 @@
       <change beforePath="$PROJECT_DIR$/out/artifacts/ControlPanel_jar/ControlPanel.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/ControlPanel_jar/ControlPanel.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/Server_jar/Server.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Server_jar/Server.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/Workstation_jar/Workstation.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Workstation_jar/Workstation.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/KDP Linda Projekat/rs/ac/bg/etf/kdp/gui/ControlPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/KDP Linda Projekat/rs/ac/bg/etf/kdp/gui/ControlPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/KDP Linda Projekat/rs/ac/bg/etf/kdp/server/ClientCallback.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/KDP Linda Projekat/rs/ac/bg/etf/kdp/server/ClientCallback.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/KDP Linda Projekat/rs/ac/bg/etf/kdp/server/LindaManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/KDP Linda Projekat/rs/ac/bg/etf/kdp/server/LindaManager.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/KDP Linda Projekat/rs/ac/bg/etf/kdp/server/LindaProcess.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/KDP Linda Projekat/rs/ac/bg/etf/kdp/server/LindaProcess.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/KDP Linda Projekat/rs/ac/bg/etf/kdp/server/LindaRMIServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/KDP Linda Projekat/rs/ac/bg/etf/kdp/server/LindaRMIServer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/KDP Linda Projekat/rs/ac/bg/etf/kdp/beans/JobContainer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/KDP Linda Projekat/rs/ac/bg/etf/kdp/beans/JobContainer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/KDP Linda Projekat/rs/ac/bg/etf/kdp/gui/ServerPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/KDP Linda Projekat/rs/ac/bg/etf/kdp/gui/ServerPanel.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/KDP Linda Projekat/rs/ac/bg/etf/kdp/server/LindaServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/KDP Linda Projekat/rs/ac/bg/etf/kdp/server/LindaServer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/KDP Linda Projekat/rs/ac/bg/etf/kdp/server/LindaWorkstation.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/KDP Linda Projekat/rs/ac/bg/etf/kdp/server/LindaWorkstation.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/KDP Linda Projekat/rs/ac/bg/etf/kdp/tests/Test.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/KDP Linda Projekat/rs/ac/bg/etf/kdp/tests/Test.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/beans/JobContainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/beans/JobContainer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/gui/ControlPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/gui/ControlPanel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/gui/ServerPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/gui/ServerPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/server/ClientCallback.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/server/ClientCallback.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/server/LindaManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/server/LindaManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/server/LindaProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/server/LindaProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/server/LindaRMIServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/server/LindaRMIServer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/server/LindaServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/server/LindaServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/server/LindaWorkstation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/server/LindaWorkstation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/tests/Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/rs/ac/bg/etf/kdp/tests/Test.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,7 +67,7 @@
       <recent name="rs.ac.bg.etf.js150411d.util" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.ControlPanel">
+  <component name="RunManager" selected="Application.WorkstationPanel">
     <configuration name="ControlPanel" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="rs.ac.bg.etf.kdp.gui.ControlPanel" />
       <module name="KDP Linda Projekat" />
@@ -218,7 +206,9 @@
       <workItem from="1582637606757" duration="5024000" />
       <workItem from="1582722585736" duration="8696000" />
       <workItem from="1582745642191" duration="4124000" />
-      <workItem from="1582798087294" duration="5132000" />
+      <workItem from="1582798087294" duration="6198000" />
+      <workItem from="1582813950505" duration="6109000" />
+      <workItem from="1583082252692" duration="2375000" />
     </task>
     <servers />
   </component>
@@ -262,46 +252,46 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="276" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1581040320902" />
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1582803022237">
+    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1583106437674">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1582803022237" />
-    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1582803022237">
+    <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1583106437674" />
+    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1583106437673">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1582803022237" />
-    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1582803022237">
+    <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1583106437673" />
+    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1583106437673">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1582803022237" />
-    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1582803022237">
+    <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1583106437673" />
+    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1583106437673">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1582803022237" />
-    <state width="1877" height="278" key="GridCell.Tab.1.bottom" timestamp="1582798553534">
+    <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1583106437673" />
+    <state width="1877" height="278" key="GridCell.Tab.1.bottom" timestamp="1582810969259">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="278" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1582798553534" />
-    <state width="1877" height="278" key="GridCell.Tab.1.center" timestamp="1582798553534">
+    <state width="1877" height="278" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1582810969259" />
+    <state width="1877" height="278" key="GridCell.Tab.1.center" timestamp="1582810969259">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="278" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1582798553534" />
-    <state width="1877" height="278" key="GridCell.Tab.1.left" timestamp="1582798553534">
+    <state width="1877" height="278" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1582810969259" />
+    <state width="1877" height="278" key="GridCell.Tab.1.left" timestamp="1582810969259">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="278" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1582798553534" />
-    <state width="1877" height="278" key="GridCell.Tab.1.right" timestamp="1582798553534">
+    <state width="1877" height="278" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1582810969259" />
+    <state width="1877" height="278" key="GridCell.Tab.1.right" timestamp="1582810969259">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="278" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1582798553534" />
+    <state width="1877" height="278" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1582810969259" />
     <state x="397" y="186" key="SettingsEditor" timestamp="1581037914788">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="397" y="186" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1581037914788" />
-    <state x="565" y="403" key="com.intellij.ide.util.TipDialog" timestamp="1582798091077">
+    <state x="565" y="403" key="com.intellij.ide.util.TipDialog" timestamp="1583082253943">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="565" y="403" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1582798091077" />
+    <state x="565" y="403" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1583082253943" />
     <state x="690" y="287" key="extract.method.dialog" timestamp="1580852881351">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

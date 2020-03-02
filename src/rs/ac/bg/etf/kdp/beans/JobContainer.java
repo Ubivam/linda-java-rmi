@@ -114,4 +114,36 @@ public class JobContainer {
     public void setManagerId(UUID managerId) {
         this.managerId = managerId;
     }
+
+    public String toString () {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Job created by : " + managerId + "\n");
+        sb.append("Job arrived on server at :" + startTime.toString() + "\n");
+        sb.append("Job class : " + className + "\n");
+
+        String state = null;
+        switch (jobState){
+            case READY:
+                state = "Ready";
+                break;
+            case RUNNING:
+                state = "Running";
+                break;
+            case SCHEDULED:
+                state = "Scheduled";
+                break;
+            case DONE:
+                state = "Done";
+                break;
+            case FAILED:
+                state = "Failed";
+                break;
+            case ABORTED:
+                state = "Aborted";
+        }
+        sb.append("Job state : " + state + "\n");
+
+        sb.append("Job finished at : "+ endTime.toString() + "\n");
+        return sb.toString();
+    }
 }

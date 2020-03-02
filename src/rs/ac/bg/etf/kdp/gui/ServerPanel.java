@@ -20,10 +20,12 @@ public class ServerPanel extends JPanel {
 
     private static final String JOBS = "Active jobs grid";
     private static final String START_SERVER = "START A SERVER";
+    private static final String PRINT_CURRENT_LOG = "PRINT CURRENT LOG";
     private static final String CONSOLE = "Console";
 
     private Thread t;
     private JButton startJobButton;
+    private JButton printCurrentLogButton;
     private JLabel consoleLabel;
     private JTextArea console;
     private JFrame appFrame;
@@ -38,29 +40,29 @@ public class ServerPanel extends JPanel {
     public ServerPanel() {
         appFrame = new JFrame("Server Panel");
         appFrame.add("Center", this);
-        appFrame.setSize(WIDTH,HEIGHT);
+        appFrame.setSize(WIDTH, HEIGHT);
 
-        setLayout(new GridLayout(2,1));
+        setLayout(new GridLayout(2, 1));
         JPanel panel1 = new JPanel();
         JPanel panel2 = new JPanel();
         this.add(panel1);
         this.add(panel2);
         jobsPanels = new ArrayList<>();
         jobsGraphic = new ArrayList<>();
-        panel1.setLayout(new GridLayout(11, 1));
-        for(int i = 0; i<9; i++){
+        panel1.setLayout(new GridLayout(12, 1));
+        for (int i = 0; i < 9; i++) {
             var panel = new JPanel();
             jobsPanels.add(panel);
             panel1.add(panel);
-            if(i == 0){
-                panel.setLayout(new GridLayout(1,6));
+            if (i == 0) {
+                panel.setLayout(new GridLayout(1, 6));
                 activeJobsLabel = new JLabel(JOBS);
                 panel.add(activeJobsLabel);
             }
-            if(i!= 0 && i!=8 ){
-                for(int j = 0 ; j < 6 ; j++){
+            if (i != 0 && i != 8) {
+                for (int j = 0; j < 6; j++) {
                     java.net.URL imgURL = getClass().getResource("/images/job0.gif");
-                    ImageIcon ic = new ImageIcon(imgURL,"D");
+                    ImageIcon ic = new ImageIcon(imgURL, "D");
                     JLabel lab = new JLabel(ic);
                     jobsGraphic.add(lab);
                     panel.add(lab);
@@ -74,7 +76,7 @@ public class ServerPanel extends JPanel {
         startJobButton.addActionListener(
                 e -> {
                     try {
-                        if(lindaServer == null) {
+                        if (lindaServer == null) {
                             lindaServer = new LindaServer(this);
                         }
                         if (!serverActive) {
@@ -83,6 +85,7 @@ public class ServerPanel extends JPanel {
                             LindaServer.setLog(System.out);
                             guiLog("Linda server started...");
                             serverActive = true;
+                            printCurrentLogButton.setEnabled(true);
                             t = new Thread(() -> {
                                 while (true) {
                                     try {
@@ -95,90 +98,109 @@ public class ServerPanel extends JPanel {
                             });
                             t.start();
 
-                        }
-                        else {
+                        } else {
                             t.stop();
-                            UnicastRemoteObject.unexportObject(r,false);
+                            UnicastRemoteObject.unexportObject(r, false);
                             lindaServer = null;
                             r = null;
                             guiLog("Linda server stopped...");
                             serverActive = false;
                         }
 
-                    } catch (RemoteException  exception) {
+                    } catch (RemoteException exception) {
                         exception.printStackTrace();
                     }
                 }
         );
 
+        printCurrentLogButton = new JButton(PRINT_CURRENT_LOG);
+
+        printCurrentLogButton.addActionListener(
+                e -> {
+                    new Thread(() -> {
+                        try {
+                            lindaServer.logHistory();
+                        } catch (RemoteException ex) {
+                            ex.printStackTrace();
+                        }
+                    }).start();
+                }
+        );
+        printCurrentLogButton.setEnabled(false);
         consoleLabel = new JLabel(CONSOLE);
 
         console = new JTextArea();
-        JScrollPane scroll = new JScrollPane (console,
+        JScrollPane scroll = new JScrollPane(console,
                 JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
         panel1.add(startJobButton);
+        panel1.add(printCurrentLogButton);
         panel1.add(consoleLabel);
         panel2.add(scroll);
         appFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         appFrame.setVisible(true);
     }
 
-    public static void main (String args[]) {
+    public static void main(String args[]) {
         new ServerPanel();
     }
 
-    public void guiLog (String s) {
-        StringWriter text = new StringWriter();
-        PrintWriter out = new PrintWriter(text);
-        out.println(console.getText());
-        out.println(s);
-        console.setText(text.toString());
+    public void guiLog(String s) {
+        new Thread(()->{
+            StringWriter text = new StringWriter();
+            PrintWriter out = new PrintWriter(text);
+            out.println(console.getText());
+            out.println(s);
+            console.setText(text.toString());
+        }).start();
     }
 
-    public void updateGraphicsToEmpty (int pos){
-        if(pos > 41) {
+    public void updateGraphicsToEmpty(int pos) {
+        if (pos > 41) {
             return;
         }
         java.net.URL imgURL = getClass().getResource("/images/job0.gif");
-        ImageIcon ic = new ImageIcon(imgURL,"D");
+        ImageIcon ic = new ImageIcon(imgURL, "D");
         JLabel lab = new JLabel(ic);
-        jobsGraphic.set(pos,lab);
+        jobsGraphic.set(pos, lab);
         jobsPanels.get((pos / 6) + 1).remove(pos % 6);
-        jobsPanels.get((pos / 6) + 1).add(lab,pos % 6);
+        jobsPanels.get((pos / 6) + 1).add(lab, pos % 6);
         jobsPanels.get((pos / 6) + 1).revalidate();
         jobsPanels.get((pos / 6) + 1).repaint();
     }
+
     public void updateGraphicToReady(int pos) {
-        if(pos > 41) {
+        if (pos > 41) {
             return;
         }
         java.net.URL imgURL = getClass().getResource("/images/job1.gif");
-        ImageIcon ic = new ImageIcon(imgURL,"D");
+        ImageIcon ic = new ImageIcon(imgURL, "D");
         JLabel lab = new JLabel(ic);
-        jobsGraphic.set(pos,lab);
+        jobsGraphic.set(pos, lab);
         jobsPanels.get((pos / 6) + 1).remove(pos % 6);
-        jobsPanels.get((pos / 6) + 1).add(lab,pos % 6);
+        jobsPanels.get((pos / 6) + 1).add(lab, pos % 6);
         jobsPanels.get((pos / 6) + 1).revalidate();
         jobsPanels.get((pos / 6) + 1).repaint();
     }
+
     public void updateGraphicsToExecuting(int pos) {
         java.net.URL imgURL = getClass().getResource("/images/job2.gif");
-        ImageIcon ic = new ImageIcon(imgURL,"D");
+        ImageIcon ic = new ImageIcon(imgURL, "D");
         JLabel lab = new JLabel(ic);
-        jobsGraphic.set(pos,lab);
+        jobsGraphic.set(pos, lab);
         jobsPanels.get(1).remove(0);
-        jobsPanels.get(1).add(lab,0);
+        jobsPanels.get(1).add(lab, 0);
         jobsPanels.get(1).revalidate();
         jobsPanels.get(1).repaint();
     }
+
     public void updateGraphicsToError(int pos) {
         java.net.URL imgURL = getClass().getResource("/images/job3.gif");
-        ImageIcon ic = new ImageIcon(imgURL,"D");
+        ImageIcon ic = new ImageIcon(imgURL, "D");
         JLabel lab = new JLabel(ic);
-        jobsGraphic.set(pos,lab);
+        jobsGraphic.set(pos, lab);
         jobsPanels.get(1).remove(0);
-        jobsPanels.get(1).add(lab,0);
+        jobsPanels.get(1).add(lab, 0);
         jobsPanels.get(1).revalidate();
         jobsPanels.get(1).repaint();
     }
